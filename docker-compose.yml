@@ -1,0 +1,19 @@
+version: '3'
+
+services:
+  web:
+    container_name: advakkad-website
+    build:
+      context: .
+      dockerfile: Dockerfile
+    restart: always
+    ports:
+      - 3000:3000
+    environment:
+      - NODE_ENV=production
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
