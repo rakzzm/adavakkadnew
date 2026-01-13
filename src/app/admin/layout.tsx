@@ -24,7 +24,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
 
   const menuGroups = [
     {
-      title: 'Sales product manager',
+      title: 'Sales Management',
       items: [
         { name: 'Dashboard', icon: 'dashboard', path: '/admin/dashboard', type: 'link' },
         { 
