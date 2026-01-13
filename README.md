@@ -1,102 +1,36 @@
-# Advakkad Website
+This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
-A modern, premium website built with cutting-edge design principles and deployed using Docker.
+## Getting Started
 
-## Features
-
-- 🎨 **Premium Design**: Modern aesthetics with vibrant colors, glassmorphism, and smooth animations
-- 📱 **Fully Responsive**: Optimized for all devices and screen sizes
-- ⚡ **Performance Optimized**: Lightning-fast loading with nginx and optimized assets
-- 🚀 **Docker Ready**: Easy deployment with Docker and docker-compose
-- 🔒 **Security Headers**: Built-in security best practices
-
-## Quick Start with Docker
-
-### Prerequisites
-
-- Docker installed on your system
-- Docker Compose installed
-
-### Running the Website
-
-1. **Build and start the container:**
-
-   ```bash
-   docker-compose up --build -d
-   ```
-
-2. **Access the website:**
-   Open your browser and navigate to `http://localhost:7002`
-
-3. **Stop the container:**
-   ```bash
-   docker-compose down
-   ```
-
-### Docker Commands
-
-**View running containers:**
+First, run the development server:
 
 ```bash
-docker-compose ps
+npm run dev
+# or
+yarn dev
+# or
+pnpm dev
+# or
+bun dev
 ```
 
-**View logs:**
+Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-```bash
-docker-compose logs -f
-```
+You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
 
-**Rebuild after changes:**
+This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
 
-```bash
-docker-compose up --build -d
-```
+## Learn More
 
-**Remove container and images:**
+To learn more about Next.js, take a look at the following resources:
 
-```bash
-docker-compose down --rmi all
-```
+- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
+- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
 
-## Development
+You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
 
-The website uses:
+## Deploy on Vercel
 
-- **HTML5** for semantic structure
-- **CSS3** with custom properties for modern styling
-- **Vanilla JavaScript** for interactivity
-- **Nginx** for serving static files
-- **Docker** for containerization
+The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
-### File Structure
-
-```
-.
-├── index.html          # Main HTML file
-├── styles.css          # Design system and styles
-├── script.js           # Interactive functionality
-├── Dockerfile          # Docker image configuration
-├── docker-compose.yml  # Docker Compose setup
-├── nginx.conf          # Nginx server configuration
-└── README.md           # This file
-```
-
-## Port Configuration
-
-The website runs on **port 7002** by default. To change this:
-
-1. Edit `docker-compose.yml`
-2. Modify the ports mapping: `"YOUR_PORT:80"`
-3. Rebuild and restart: `docker-compose up --build -d`
-
-## Tech Stack
-
-- **Frontend**: HTML5, CSS3, JavaScript (ES6+)
-- **Fonts**: Google Fonts (Inter, Outfit)
-- **Server**: Nginx (Alpine Linux)
-- **Container**: Docker
-
-## License
-
-Copyright © 2026 Advakkad. All rights reserved.
+Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
