@@ -105,7 +105,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
            <div className="brand-logo">
              {/* <span className="material-symbols-outlined logo-icon">diamond</span> */}
              <div className="brand-text">
-                <img src="/logo/admin-logo.jpg" alt="Advakkad Admin" style={{ maxWidth: '180px', width: '100%', height: 'auto', borderRadius: '4px' }} />
+                <img src="/logo/admin-logo.jpg" alt="Advakkad Admin" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
              </div>
            </div>
         </div>
@@ -229,21 +229,37 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
         .admin-sidebar.closed .sidebar-footer .nav-text { display: none; }
         
         .sidebar-header {
-          padding: 1.5rem 1rem;
-          min-height: 100px;
+          padding: 0;
+          height: 120px;
           display: flex;
           align-items: center;
           justify-content: center;
-          border-bottom: 1px solid rgba(255,255,255,0.08);
+          background-color: white;
+          border-bottom: 1px solid #eee;
         }
 
-        .brand-logo { display: flex; align-items: center; justify-content: center; width: 100%; overflow: hidden; }
-        .brand-text { display: flex; justify-content: center; width: 100%; }
+        .brand-logo { 
+          display: flex; 
+          align-items: center; 
+          justify-content: center; 
+          width: 100%; 
+          height: 100%;
+          overflow: hidden; 
+        }
+        
+        .brand-text { 
+          display: flex; 
+          justify-content: center; 
+          align-items: center;
+          width: 100%; 
+          height: 100%;
+          padding: 1rem;
+        }
+
+        .admin-sidebar.closed .sidebar-header { padding: 0.5rem; height: 80px; }
         /* .logo-icon { color: #d32f2f; font-size: 2rem; min-width: 32px; } */
         /* .brand-text h2 { margin: 0; font-family: var(--font-playfair); font-size: 1.4rem; letter-spacing: 0.5px; white-space: nowrap; } */
         /* .brand-text p { margin: 0; font-size: 0.75rem; color: #888; text-transform: uppercase; letter-spacing: 1px; white-space: nowrap; } */
-
-        .admin-sidebar.closed .sidebar-header { padding: 1rem 0; min-height: 80px; }
 
         .sidebar-nav { flex: 1; padding: 1.5rem 1rem; }
         .menu-group { margin-bottom: 2rem; }
