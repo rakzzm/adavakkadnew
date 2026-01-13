@@ -293,6 +293,8 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
           overflow: hidden;
           transition: max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1);
           padding-left: 1rem;
+          display: flex;
+          flex-direction: column;
         }
         .submenu.open { max-height: 500px; padding-top: 0.25rem; padding-bottom: 0.5rem; }
 
