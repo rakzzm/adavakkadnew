@@ -9,19 +9,90 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
   const pathname = usePathname();
   const { logout, user } = useAuth();
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
+  const [expandedMenus, setExpandedMenus] = useState<Record<string, boolean>>({
+    'Order': false,
+    'Products': false,
+    'Customer': false
+  });
 
-  // Protected Route Check (Basic)
-  if (!user || user.role !== 'admin') {
-     // In a real app we'd redirect here, but for now we'll show a message or let it render 
-     // (The page content usually handles the redirect or AuthContext does)
-  }
+  const toggleMenu = (name: string) => {
+    setExpandedMenus(prev => ({
+      ...prev,
+      [name]: !prev[name]
+    }));
+  };
 
-  const menuItems = [
-    { name: 'Dashboard', icon: 'dashboard', path: '/admin/dashboard' },
-    { name: 'Products', icon: 'inventory_2', path: '/admin/products' },
-    { name: 'Orders', icon: 'shopping_cart', path: '/admin/orders' },
-    { name: 'Customers', icon: 'group', path: '/admin/customers' },
-    { name: 'Settings', icon: 'settings', path: '/admin/settings' },
+  const menuGroups = [
+    {
+      title: 'Sales product manager',
+      items: [
+        { name: 'Dashboard', icon: 'dashboard', path: '/admin/dashboard', type: 'link' },
+        { 
+          name: 'Order', 
+          icon: 'shopping_cart', 
+          type: 'sub',
+          subItems: [
+            { name: 'Order List', path: '/admin/orders' },
+            { name: 'Order Details', path: '/admin/orders/details' },
+          ]
+        },
+        { 
+          name: 'Products', 
+          icon: 'inventory_2', 
+          type: 'sub',
+          subItems: [
+            { name: 'Product List', path: '/admin/products' },
+            { name: 'Add Product', path: '/admin/products/add' },
+          ]
+        },
+        { 
+          name: 'Customer', 
+          icon: 'group', 
+          type: 'sub',
+          subItems: [
+            { name: 'Customer List', path: '/admin/customers' },
+            { name: 'Customer Details', path: '/admin/customers/details' },
+          ] 
+        },
+        { 
+          name: 'Buyer', 
+          icon: 'account_balance_wallet', 
+          type: 'sub',
+          subItems: [{ name: 'Buyer List', path: '/admin/buyers' }] 
+        },
+        { 
+          name: 'Invoices', 
+          icon: 'receipt', 
+          type: 'sub',
+          subItems: [{ name: 'Invoice List', path: '/admin/invoices' }] 
+        },
+      ]
+    },
+    {
+      title: 'Support Apps',
+      items: [
+        { name: 'Chats', icon: 'chat', type: 'sub', subItems: [{ name: 'Inbox', path: '/admin/chat' }] },
+        { name: 'Email', icon: 'mail', type: 'sub', subItems: [{ name: 'Compose', path: '/admin/email/compose' }] },
+        { name: 'Todo App', icon: 'check_circle', type: 'sub', subItems: [{ name: 'Tasks', path: '/admin/todo' }] },
+      ]
+    },
+    {
+      title: 'All Pages',
+      items: [
+        { name: 'Profile', icon: 'person', type: 'sub', subItems: [{ name: 'My Profile', path: '/admin/profile' }] },
+        { name: 'User', icon: 'manage_accounts', type: 'sub', subItems: [{ name: 'User List', path: '/admin/users' }] },
+        { name: 'Authentication', icon: 'lock', type: 'sub', subItems: [{ name: 'Login', path: '/login' }] },
+        { name: 'Error Pages', icon: 'error', type: 'sub', subItems: [{ name: '404', path: '/404' }] },
+        { name: 'Setting', icon: 'settings', type: 'sub', subItems: [{ name: 'General', path: '/admin/settings' }] },
+        { name: 'FAQ', icon: 'help', type: 'sub', subItems: [{ name: 'FAQ List', path: '/admin/faq' }] },
+      ]
+    },
+    {
+      title: 'User Interface',
+      items: [
+        { name: 'Components', icon: 'layers', type: 'sub', subItems: [{ name: 'Buttons', path: '/admin/ui/buttons' }] },
+      ]
+    }
   ];
 
   return (
@@ -34,15 +105,46 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
         </div>
 
         <nav className="sidebar-nav">
-          {menuItems.map((item) => (
-            <Link 
-              key={item.path} 
-              href={item.path}
-              className={`nav-item ${pathname === item.path ? 'active' : ''}`}
-            >
-              <span className="material-symbols-outlined">{item.icon}</span>
-              <span className="nav-text">{item.name}</span>
-            </Link>
+          {menuGroups.map((group, gIdx) => (
+            <div key={gIdx} className="menu-group">
+              <h3 className="group-title">{group.title}</h3>
+              {group.items.map((item, iIdx) => (
+                <div key={iIdx} className="menu-item-container">
+                  {item.type === 'link' ? (
+                    <Link 
+                      href={item.path || '#'}
+                      className={`nav-item ${pathname === item.path ? 'active' : ''}`}
+                    >
+                      <span className="material-symbols-outlined icon">{item.icon}</span>
+                      <span className="nav-text">{item.name}</span>
+                    </Link>
+                  ) : (
+                    <>
+                      <div 
+                        className={`nav-item ${expandedMenus[item.name] ? 'expanded' : ''}`}
+                        onClick={() => toggleMenu(item.name)}
+                        style={{ cursor: 'pointer', justifyContent: 'space-between' }}
+                      >
+                         <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+                           <span className="material-symbols-outlined icon">{item.icon}</span>
+                           <span className="nav-text">{item.name}</span>
+                         </div>
+                         <span className="material-symbols-outlined chevron">expand_more</span>
+                      </div>
+                      {/* Submenu */}
+                      <div className={`submenu ${expandedMenus[item.name] ? 'open' : ''}`}>
+                        {item.subItems?.map((sub, sIdx) => (
+                          <Link key={sIdx} href={sub.path} className="sub-nav-item">
+                            <span className="bullet">•</span>
+                            <span>{sub.name}</span>
+                          </Link>
+                        ))}
+                      </div>
+                    </>
+                  )}
+                </div>
+              ))}
+            </div>
           ))}
         </nav>
 
@@ -85,20 +187,33 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
         .admin-sidebar {
           background-color: #1a1a1a;
           color: white;
-          width: 260px;
+          width: 280px;
           transition: width 0.3s ease;
           display: flex;
           flex-direction: column;
           position: fixed;
           height: 100vh;
           z-index: 100;
+          overflow-y: auto; 
+        }
+
+        .admin-sidebar::-webkit-scrollbar {
+          width: 6px;
+        }
+        .admin-sidebar::-webkit-scrollbar-thumb {
+          background: #333;
+          border-radius: 3px;
         }
 
         .admin-sidebar.closed {
           width: 70px;
+          overflow: hidden;
         }
 
         .admin-sidebar.closed .nav-text,
+        .admin-sidebar.closed .group-title,
+        .admin-sidebar.closed .chevron,
+        .admin-sidebar.closed .submenu,
         .admin-sidebar.closed .sidebar-header h2,
         .admin-sidebar.closed .sidebar-header p {
           display: none;
@@ -127,19 +242,78 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
           flex-direction: column;
         }
 
+        .menu-group {
+          margin-bottom: 1rem;
+        }
+
+        .group-title {
+          font-size: 0.75rem;
+          text-transform: uppercase;
+          color: #666;
+          padding: 0 2rem;
+          margin-bottom: 0.5rem;
+          margin-top: 1rem;
+          font-weight: 600;
+        }
+
         .nav-item {
           display: flex;
           align-items: center;
-          padding: 1rem 2rem;
+          padding: 0.85rem 2rem;
           color: #bdbdbd;
           text-decoration: none;
           transition: all 0.2s;
           gap: 1rem;
+          font-size: 0.95rem;
         }
 
-        .nav-item:hover, .nav-item.active {
-          background-color: #d32f2f;
+        .nav-item:hover, .nav-item.active, .nav-item.expanded {
+          background-color: rgba(211, 47, 47, 0.1);
+          color: #d32f2f;
+          border-right: 3px solid #d32f2f;
+        }
+
+        .nav-item .icon {
+          font-size: 1.25rem;
+        }
+
+        .chevron {
+          font-size: 1.1rem;
+          transition: transform 0.2s;
+        }
+
+        .nav-item.expanded .chevron {
+          transform: rotate(180deg);
+        }
+
+        .submenu {
+          max-height: 0;
+          overflow: hidden;
+          transition: max-height 0.3s ease-in-out;
+          background: #111;
+        }
+
+        .submenu.open {
+          max-height: 500px; /* Arbitrary large height for animation */
+        }
+
+        .sub-nav-item {
+          display: flex;
+          align-items: center;
+          gap: 1rem;
+          padding: 0.6rem 2rem 0.6rem 3.5rem;
+          color: #999;
+          text-decoration: none;
+          font-size: 0.9rem;
+          transition: color 0.2s;
+        }
+
+        .sub-nav-item:hover {
           color: white;
+        }
+
+        .bullet {
+          font-size: 0.5rem;
         }
 
         .admin-sidebar.closed .nav-item {
@@ -150,6 +324,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
         .sidebar-footer {
           padding: 1rem;
           border-top: 1px solid rgba(255,255,255,0.1);
+          margin-top: auto;
         }
 
         .logout-btn {
@@ -172,7 +347,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
         /* Main Content Styles */
         .admin-main {
           flex: 1;
-          margin-left: 260px;
+          margin-left: 280px;
           transition: margin-left 0.3s ease;
           display: flex;
           flex-direction: column;
