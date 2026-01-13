@@ -117,6 +117,25 @@ export default function CartDrawer() {
                      </div>
                    </div>
                 </div>
+                   
+                   <button
+                     onClick={() => removeFromCart(item.id, item.size, item.age)}
+                     style={{
+                       background: 'none',
+                       border: 'none',
+                       color: '#ef4444',
+                       cursor: 'pointer',
+                       padding: '0.5rem',
+                       display: 'flex',
+                       alignItems: 'center',
+                       justifyContent: 'center',
+                       marginLeft: '0.5rem'
+                     }}
+                     title="Remove Item"
+                   >
+                     <span className="material-symbols-outlined" style={{ fontSize: '1.2rem' }}>delete</span>
+                   </button>
+                </div>
               ))}
             </div>
           )}
