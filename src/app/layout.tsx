@@ -4,6 +4,7 @@ import { Inter, Playfair_Display, Outfit } from "next/font/google";
 import { CartProvider } from '@/context/CartContext';
 import { AuthProvider } from '@/context/AuthContext';
 import LayoutWrapper from '@/components/LayoutWrapper';
+import { ProductProvider } from '@/context/ProductContext';
 import { CustomerProvider } from '@/context/CustomerContext';
 
 const inter = Inter({ subsets: ["latin"], variable: '--font-inter' });
