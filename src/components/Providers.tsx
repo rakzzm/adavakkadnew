@@ -8,6 +8,7 @@ import { CustomerProvider } from '@/context/CustomerContext';
 import { BuyerProvider } from '@/context/BuyerContext';
 import { InvoiceProvider } from '@/context/InvoiceContext';
 import { ChatProvider } from '@/context/ChatContext';
+import { FAQProvider } from '@/context/FAQContext';
 
 export default function Providers({ children }: { children: ReactNode }) {
   return (
@@ -18,7 +19,9 @@ export default function Providers({ children }: { children: ReactNode }) {
             <BuyerProvider>
               <InvoiceProvider>
                 <ChatProvider>
-                  {children}
+                  <FAQProvider>
+                    {children}
+                  </FAQProvider>
                 </ChatProvider>
               </InvoiceProvider>
             </BuyerProvider>
