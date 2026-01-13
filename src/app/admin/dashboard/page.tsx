@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import Link from 'next/link';
 import { useAuth } from '@/context/AuthContext';
 
 export default function AdminDashboard() {
@@ -22,16 +23,23 @@ export default function AdminDashboard() {
     // Simulate API call
     setTimeout(() => {
       // Randomize data slightly to show "change"
-      const multiplier = dateRange === 'today' ? 0.1 : dateRange === 'yesterday' ? 0.15 : dateRange === '30d' ? 4 : 1;
+      const multiplier = dateRange === 'today' ? 0.05 : 
+                         dateRange === 'yesterday' ? 0.08 : 
+                         dateRange === '7d' ? 0.25 : 
+                         dateRange === '30d' ? 1 : 
+                         dateRange === 'year' ? 12 : 1;
       
+      // Add some randomness to make it feel real
+      const randomFactor = 0.9 + Math.random() * 0.2;
+
       setStats({
-        revenue: { value: Math.floor(124500 * multiplier), label: 'Total Revenue', trend: '+12.5%' },
-        orders: { value: Math.floor(452 * multiplier), label: 'Total Orders', trend: '+5.2%' },
-        visitors: { value: Math.floor(14205 * multiplier), label: 'Unique Visitors', trend: '-2.4%' },
-        avgOrder: { value: 1850, label: 'Avg. Order Value', trend: '+8.1%' }
+        revenue: { value: Math.floor(124500 * multiplier * randomFactor), label: 'Total Revenue', trend: multiplier > 1 ? '+125.5%' : '+12.5%' },
+        orders: { value: Math.floor(452 * multiplier * randomFactor), label: 'Total Orders', trend: multiplier > 1 ? '+45.2%' : '+5.2%' },
+        visitors: { value: Math.floor(14205 * multiplier * randomFactor), label: 'Unique Visitors', trend: '-2.4%' },
+        avgOrder: { value: Math.floor(1850 * (1 + Math.random() * 0.1)), label: 'Avg. Order Value', trend: '+8.1%' }
       });
       setIsLoading(false);
-    }, 600);
+    }, 400);
   }, [dateRange]);
 
   const recentOrders = [
@@ -69,7 +77,7 @@ export default function AdminDashboard() {
       </div>
 
       {/* Metrics Row */}
-      <div className="metrics-grid">
+      <div className={`metrics-grid ${isLoading ? 'loading' : ''}`}>
         <div className="metric-card">
           <div className="metric-header">
             <div className="icon-box green"><span className="material-symbols-outlined">payments</span></div>
@@ -83,7 +91,7 @@ export default function AdminDashboard() {
             <div className="icon-box blue"><span className="material-symbols-outlined">shopping_bag</span></div>
             <span className={`trend ${stats.orders.trend.includes('+') ? 'up' : 'down'}`}>{stats.orders.trend}</span>
           </div>
-          <h3>{stats.orders.value}</h3>
+          <h3>{stats.orders.value.toLocaleString()}</h3>
           <p>{stats.orders.label}</p>
         </div>
         <div className="metric-card">
@@ -179,10 +187,10 @@ export default function AdminDashboard() {
           <div className="card quick-actions">
              <h2>Quick Actions</h2>
              <div className="action-grid">
-               <button><span className="material-symbols-outlined">add_box</span> Add Product</button>
-               <button><span className="material-symbols-outlined">person_add</span> Add User</button>
-               <button><span className="material-symbols-outlined">post_add</span> Create Invoice</button>
-               <button><span className="material-symbols-outlined">settings</span> Settings</button>
+               <Link href="/admin/products" className="action-btn-link"><span className="material-symbols-outlined">add_box</span> Add Product</Link>
+               <Link href="/admin/users" className="action-btn-link"><span className="material-symbols-outlined">person_add</span> Add User</Link>
+               <Link href="/admin/invoices" className="action-btn-link"><span className="material-symbols-outlined">post_add</span> Create Invoice</Link>
+               <Link href="/admin/settings" className="action-btn-link"><span className="material-symbols-outlined">settings</span> Settings</Link>
              </div>
           </div>
         </div>
@@ -200,7 +208,9 @@ export default function AdminDashboard() {
         .primary-btn { background: #1a1a1a; color: white; border: none; padding: 0.6rem 1.2rem; border-radius: 8px; display: flex; align-items: center; gap: 0.5rem; font-weight: 500; cursor: pointer; }
         
         /* Metrics */
-        .metrics-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1.5rem; margin-bottom: 2rem; }
+        .metrics-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1.5rem; margin-bottom: 2rem; transition: opacity 0.3s; }
+        .metrics-grid.loading { opacity: 0.5; pointer-events: none; }
+        
         .metric-card { background: white; padding: 1.5rem; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.02); transition: transform 0.2s; }
         .metric-card:hover { transform: translateY(-3px); box-shadow: 0 10px 15px rgba(0,0,0,0.05); }
         
@@ -269,9 +279,23 @@ export default function AdminDashboard() {
         .quick-actions { background: linear-gradient(135deg, #1a1a1a 0%, #333 100%); color: white; }
         .quick-actions h2 { color: white; margin-bottom: 1.5rem; }
         .action-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
-        .action-grid button { border: none; background: rgba(255,255,255,0.1); color: white; padding: 1rem; border-radius: 8px; display: flex; flex-direction: column; align-items: center; gap: 0.5rem; cursor: pointer; transition: background 0.2s; font-size: 0.9rem; }
-        .action-grid button:hover { background: rgba(255,255,255,0.2); }
-        .action-grid span { font-size: 1.5rem; color: #ef5350; }
+        .action-btn-link { 
+          border: none; 
+          background: rgba(255,255,255,0.1); 
+          color: white; 
+          padding: 1rem; 
+          border-radius: 8px; 
+          display: flex; 
+          flex-direction: column; 
+          align-items: center; 
+          gap: 0.5rem; 
+          cursor: pointer; 
+          transition: background 0.2s; 
+          font-size: 0.9rem;
+          text-decoration: none;
+        }
+        .action-btn-link:hover { background: rgba(255,255,255,0.2); }
+        .action-btn-link span { font-size: 1.5rem; color: #ef5350; }
       `}</style>
     </div>
   );
