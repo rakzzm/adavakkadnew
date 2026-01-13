@@ -242,29 +242,17 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
           flex-direction: column;
         }
 
-        .menu-group {
-          margin-bottom: 1rem;
-        }
-
-        .group-title {
-          font-size: 0.75rem;
-          text-transform: uppercase;
-          color: #666;
-          padding: 0 2rem;
-          margin-bottom: 0.5rem;
-          margin-top: 1rem;
-          font-weight: 600;
-        }
-
         .nav-item {
           display: flex;
           align-items: center;
-          padding: 0.85rem 2rem;
+          padding: 0.85rem 1.5rem;
           color: #bdbdbd;
           text-decoration: none;
           transition: all 0.2s;
-          gap: 1rem;
+          gap: 12px;
           font-size: 0.95rem;
+          width: 100%;
+          box-sizing: border-box;
         }
 
         .nav-item:hover, .nav-item.active, .nav-item.expanded {
@@ -275,11 +263,13 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
 
         .nav-item .icon {
           font-size: 1.25rem;
+          min-width: 24px; /* Prevent shrinking */
         }
 
         .chevron {
           font-size: 1.1rem;
           transition: transform 0.2s;
+          margin-left: auto; /* Push to right */
         }
 
         .nav-item.expanded .chevron {
@@ -290,30 +280,41 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
           max-height: 0;
           overflow: hidden;
           transition: max-height 0.3s ease-in-out;
-          background: #111;
+          background: #0f0f0f;
+          display: flex;
+          flex-direction: column;
         }
 
         .submenu.open {
-          max-height: 500px; /* Arbitrary large height for animation */
+          max-height: 1000px; /* Increased to accommodate many items */
         }
 
         .sub-nav-item {
           display: flex;
           align-items: center;
-          gap: 1rem;
-          padding: 0.6rem 2rem 0.6rem 3.5rem;
-          color: #999;
+          gap: 12px;
+          padding: 0.75rem 1.5rem 0.75rem 3rem;
+          color: #888;
           text-decoration: none;
           font-size: 0.9rem;
-          transition: color 0.2s;
+          transition: all 0.2s;
+          width: 100%;
+          box-sizing: border-box;
         }
 
         .sub-nav-item:hover {
           color: white;
+          background: rgba(255,255,255,0.03);
         }
 
         .bullet {
-          font-size: 0.5rem;
+          font-size: 1.2rem;
+          line-height: 0;
+          color: #444;
+        }
+        
+        .sub-nav-item:hover .bullet {
+           color: #d32f2f;
         }
 
         .admin-sidebar.closed .nav-item {
