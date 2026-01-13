@@ -2,6 +2,14 @@
 
 import { useState, useRef } from 'react';
 
+export default function SocialPage() {
+  const [isConnected, setIsConnected] = useState(false);
+  const [file, setFile] = useState<File | null>(null);
+  const [previewUrl, setPreviewUrl] = useState<string | null>(null);
+  const [caption, setCaption] = useState('');
+  const [isPosting, setIsPosting] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
   // Mock Social Profile Data
   const [profile, setProfile] = useState<{followers: string; posts: string} | null>(null);
   const [showLoginModal, setShowLoginModal] = useState(false);
