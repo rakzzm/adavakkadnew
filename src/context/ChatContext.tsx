@@ -16,6 +16,7 @@ export type Chat = {
   lastMessage: string;
   unreadCount: number;
   lastActive: string;
+  status?: 'bot' | 'human'; // Added optional status
   messages: Message[];
 };
 

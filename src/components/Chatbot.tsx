@@ -11,12 +11,15 @@ type AdminMessage = {
   read: boolean;
 };
 
+type ChatStatus = 'bot' | 'human';
+
 type ChatSession = {
   id: string;
   customerName: string;
   lastMessage: string;
   unreadCount: number;
   lastActive: string;
+  status: ChatStatus; // Added status
   messages: AdminMessage[];
 };
 
@@ -56,6 +59,7 @@ export default function Chatbot() {
   const [inputValue, setInputValue] = useState("");
   const [isTyping, setIsTyping] = useState(false);
   const [sessionId, setSessionId] = useState<string>('');
+  const [sessionStatus, setSessionStatus] = useState<ChatStatus>('bot');
   
   const chatBoxRef = useRef<HTMLUListElement>(null);
 
@@ -73,6 +77,7 @@ export default function Chatbot() {
     const myChat = allChats.find(c => c.id === storedSession);
     
     if (myChat) {
+      setSessionStatus(myChat.status || 'bot'); // Load status
       // Convert Admin format to Local format
       const converted: LocalMessage[] = myChat.messages.map(m => ({
         text: m.text,
@@ -87,9 +92,11 @@ export default function Chatbot() {
         lastMessage: 'Started conversation',
         unreadCount: 0,
         lastActive: 'Just now',
+        status: 'bot', // Init status
         messages: []
       };
       localStorage.setItem('advakkad_chats', JSON.stringify([...allChats, newChat]));
+      setSessionStatus('bot');
     }
   }, []);
 
@@ -105,6 +112,7 @@ export default function Chatbot() {
             sender: m.sender === 'admin' ? 'incoming' : 'outgoing'
           }));
           setMessages(converted);
+          setSessionStatus(myChat.status || 'bot'); // Update status from admin
         }
       }
     };
@@ -122,7 +130,7 @@ export default function Chatbot() {
   const toggleChat = () => setIsOpen(!isOpen);
 
   // Helper to sync to localStorage
-  const syncToStorage = (text: string, sender: 'user' | 'admin') => {
+  const syncToStorage = (text: string, sender: 'user' | 'admin', newStatus?: ChatStatus) => {
     if (!sessionId) return;
     
     const allChats: ChatSession[] = JSON.parse(localStorage.getItem('advakkad_chats') || '[]');
@@ -140,6 +148,7 @@ export default function Chatbot() {
       allChats[chatIndex].messages.push(newMessage);
       allChats[chatIndex].lastMessage = text;
       allChats[chatIndex].lastActive = 'Just now';
+      if (newStatus) allChats[chatIndex].status = newStatus; // Update status
       if (sender === 'user') allChats[chatIndex].unreadCount += 1;
       
       localStorage.setItem('advakkad_chats', JSON.stringify(allChats));
@@ -150,39 +159,68 @@ export default function Chatbot() {
   };
 
   // Bot Logic
-  const generateResponse = (userMessage: string) => {
+  const generateResponse = (userMessage: string): { text: string; action: 'reply' | 'handoff' } => {
     const input = userMessage.toLowerCase();
+
+    // 1. Check for Handoff Keywords
+    if (['agent', 'human', 'person', 'support', 'talk to someone'].some(k => input.includes(k))) {
+      return { 
+        text: "I'm connecting you to a human agent. They will review your chat and reply shortly!", 
+        action: 'handoff' 
+      };
+    }
+
+    // 2. Knowledge Base Search
     for (const group of Object.values(KNOWLEDGE_BASE)) {
       if (typeof group === 'string') continue;
       if (Array.isArray(group)) {
         for (const item of group) {
-           if (item.keywords.some(k => input.includes(k))) return item.response;
+           if (item.keywords.some(k => input.includes(k))) return { text: item.response, action: 'reply' };
         }
       }
     }
-    return null; // No auto-response found
+    
+    // 3. Fallback
+    return { text: KNOWLEDGE_BASE.fallback, action: 'reply' };
   };
 
   const handleSend = () => {
     const text = inputValue.trim();
     if (!text) return;
 
-    // 1. Update UI immediately
+    // 1. Update UI & Sync User Message
     setMessages(prev => [...prev, { text, sender: 'outgoing' }]);
     setInputValue("");
     
-    // 2. Sync to Admin (User message)
+    // If we are already in 'human' mode, simply send the message and DO NOT trigger bot response
+    if (sessionStatus === 'human') {
+        syncToStorage(text, 'user');
+        return;
+    }
+
     syncToStorage(text, 'user');
 
-    // 3. Check for Auto-Response
-    const autoResponse = generateResponse(text);
-    if (autoResponse) {
-      setIsTyping(true);
-      setTimeout(() => {
-        setMessages(prev => [...prev, { text: autoResponse, sender: 'incoming' }]);
-        syncToStorage(autoResponse, 'admin'); // Auto-response acts as 'admin'
-        setIsTyping(false);
-      }, 600);
+    // 2. Generate Bot Response
+    const response = generateResponse(text);
+    
+    if (response) {
+      if (response.action === 'handoff') {
+          setSessionStatus('human');
+          setIsTyping(true);
+          setTimeout(() => {
+            setMessages(prev => [...prev, { text: response.text, sender: 'incoming' }]);
+            syncToStorage(response.text, 'admin', 'human'); // Sync with new status
+            setIsTyping(false);
+          }, 800);
+      } else {
+          // Normal Bot Reply
+          setIsTyping(true);
+          setTimeout(() => {
+            setMessages(prev => [...prev, { text: response.text, sender: 'incoming' }]);
+            syncToStorage(response.text, 'admin'); 
+            setIsTyping(false);
+          }, 600);
+      }
     }
   };
 
