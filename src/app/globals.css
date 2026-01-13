@@ -331,8 +331,8 @@ section {
 /* === HERO SECTION WITH VIDEO BACKGROUND === */
 .hero {
   width: 100%;
-  aspect-ratio: 2.5/1; /* Widescreen banner look */
-  max-height: 500px;   /* Cap height to avoid it being too big */
+  aspect-ratio: 2.2/1; /* Slightly taller */
+  max-height: 600px;   /* Increased cap */
   min-height: unset; 
   display: flex;
   align-items: center;
