@@ -103,10 +103,9 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
       <aside className={`admin-sidebar ${isSidebarOpen ? 'open' : 'closed'}`}>
         <div className="sidebar-header">
            <div className="brand-logo">
-             <span className="material-symbols-outlined logo-icon">diamond</span>
+             {/* <span className="material-symbols-outlined logo-icon">diamond</span> */}
              <div className="brand-text">
-                <h2>Advakkad</h2>
-                <p>Admin Workspace</p>
+                <img src="/logo/admin-logo.jpg" alt="Advakkad Admin" style={{ height: '50px', objectFit: 'contain' }} />
              </div>
            </div>
         </div>
