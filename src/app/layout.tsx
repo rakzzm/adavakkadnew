@@ -4,16 +4,9 @@ import { Inter, Playfair_Display, Outfit } from "next/font/google";
 import { CartProvider } from '@/context/CartContext';
 import { AuthProvider } from '@/context/AuthContext';
 import LayoutWrapper from '@/components/LayoutWrapper';
-import { ProductProvider } from '@/context/ProductContext';
+import { CustomerProvider } from '@/context/CustomerContext';
 
-const inter = Inter({ subsets: ["latin"], variable: '--font-inter' });
-const playfair = Playfair_Display({ subsets: ["latin"], variable: '--font-playfair' });
-const outfit = Outfit({ subsets: ["latin"], variable: '--font-outfit' });
-
-export const metadata: Metadata = {
-  title: 'Adavakkad Collections Wedding Center',
-  description: 'Premium digital solutions and quality clothing for modern businesses and families.',
-};
+// ... (imports remain same)
 
 export default function RootLayout({
   children,
@@ -29,9 +22,11 @@ export default function RootLayout({
         <AuthProvider>
           <CartProvider>
             <ProductProvider>
-              <LayoutWrapper>
-                {children}
-              </LayoutWrapper>
+              <CustomerProvider>
+                <LayoutWrapper>
+                  {children}
+                </LayoutWrapper>
+              </CustomerProvider>
             </ProductProvider>
           </CartProvider>
         </AuthProvider>
