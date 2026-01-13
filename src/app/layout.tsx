@@ -1,13 +1,8 @@
 import type { Metadata } from 'next';
 import './globals.css';
 import { Inter, Playfair_Display, Outfit } from "next/font/google";
-import { CartProvider } from '@/context/CartContext';
-import { AuthProvider } from '@/context/AuthContext';
+import Providers from '@/components/Providers';
 import LayoutWrapper from '@/components/LayoutWrapper';
-import { ProductProvider } from '@/context/ProductContext';
-import { CustomerProvider } from '@/context/CustomerContext';
-import { BuyerProvider } from '@/context/BuyerContext';
-import { ChatProvider } from '@/context/ChatContext';
 
 const inter = Inter({ subsets: ["latin"], variable: '--font-inter' });
 const playfair = Playfair_Display({ subsets: ["latin"], variable: '--font-playfair' });
@@ -29,23 +24,11 @@ export default function RootLayout({
         <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,400,0,0" />
       </head>
       <body className={`${inter.variable} ${playfair.variable} ${outfit.variable}`}>
-        <AuthProvider>
-          <CartProvider>
-            <ProductProvider>
-              <CustomerProvider>
-                <BuyerProvider>
-                  <InvoiceProvider>
-                    <ChatProvider>
-                      <LayoutWrapper>
-                        {children}
-                      </LayoutWrapper>
-                    </ChatProvider>
-                  </InvoiceProvider>
-                </BuyerProvider>
-              </CustomerProvider>
-            </ProductProvider>
-          </CartProvider>
-        </AuthProvider>
+        <Providers>
+          <LayoutWrapper>
+            {children}
+          </LayoutWrapper>
+        </Providers>
       </body>
     </html>
   );
