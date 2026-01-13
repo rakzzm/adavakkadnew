@@ -17,7 +17,7 @@ export default function AdminChat() {
 
   // Mark as read when opening a chat
   useEffect(() => {
-    if (activeChatId && activeChat?.unreadCount > 0) {
+    if (activeChatId && (activeChat?.unreadCount ?? 0) > 0) {
       markAsRead(activeChatId);
     }
   }, [activeChatId, activeChat?.unreadCount, markAsRead]);
