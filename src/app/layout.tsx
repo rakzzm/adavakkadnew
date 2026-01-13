@@ -6,15 +6,9 @@ import { AuthProvider } from '@/context/AuthContext';
 import LayoutWrapper from '@/components/LayoutWrapper';
 import { ProductProvider } from '@/context/ProductContext';
 import { CustomerProvider } from '@/context/CustomerContext';
+import { BuyerProvider } from '@/context/BuyerContext';
 
-const inter = Inter({ subsets: ["latin"], variable: '--font-inter' });
-const playfair = Playfair_Display({ subsets: ["latin"], variable: '--font-playfair' });
-const outfit = Outfit({ subsets: ["latin"], variable: '--font-outfit' });
-
-export const metadata: Metadata = {
-  title: 'Adavakkad Collections Wedding Center',
-  description: 'Premium digital solutions and quality clothing for modern businesses and families.',
-};
+// ... (imports remain same)
 
 export default function RootLayout({
   children,
@@ -31,9 +25,11 @@ export default function RootLayout({
           <CartProvider>
             <ProductProvider>
               <CustomerProvider>
-                <LayoutWrapper>
-                  {children}
-                </LayoutWrapper>
+                <BuyerProvider>
+                  <LayoutWrapper>
+                    {children}
+                  </LayoutWrapper>
+                </BuyerProvider>
               </CustomerProvider>
             </ProductProvider>
           </CartProvider>
