@@ -1,7 +1,8 @@
+import type { Metadata } from 'next';
+import './globals.css';
 import { Inter, Playfair_Display, Outfit } from "next/font/google";
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
-import Sidebar from '@/components/Sidebar';
 import Sidebar from '@/components/Sidebar';
 import Chatbot from '@/components/Chatbot';
 import { CartProvider } from '@/context/CartContext';
