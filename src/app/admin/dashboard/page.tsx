@@ -1,200 +1,277 @@
 'use client';
 
+import { useState, useEffect } from 'react';
+import { useAuth } from '@/context/AuthContext';
+
 export default function AdminDashboard() {
-  const stats = [
-    { title: 'Total Sales', value: '₹ 1,24,500', icon: 'payments', color: '#10b981' },
-    { title: 'New Orders', value: '18', icon: 'shopping_bag', color: '#3b82f6' },
-    { title: 'Total Products', value: '45', icon: 'inventory', color: '#f59e0b' },
-    { title: 'Customers', value: '1,203', icon: 'group', color: '#8b5cf6' },
-  ];
+  const { user } = useAuth();
+  const [dateRange, setDateRange] = useState('7d');
+  const [isLoading, setIsLoading] = useState(false);
+
+  // Mock Data State
+  const [stats, setStats] = useState({
+    revenue: { value: 124500, label: 'Total Revenue', trend: '+12.5%' },
+    orders: { value: 452, label: 'Total Orders', trend: '+5.2%' },
+    visitors: { value: 14205, label: 'Unique Visitors', trend: '-2.4%' },
+    avgOrder: { value: 1850, label: 'Avg. Order Value', trend: '+8.1%' }
+  });
+
+  // Simulating data fetch based on date filter
+  useEffect(() => {
+    setIsLoading(true);
+    // Simulate API call
+    setTimeout(() => {
+      // Randomize data slightly to show "change"
+      const multiplier = dateRange === 'today' ? 0.1 : dateRange === 'yesterday' ? 0.15 : dateRange === '30d' ? 4 : 1;
+      
+      setStats({
+        revenue: { value: Math.floor(124500 * multiplier), label: 'Total Revenue', trend: '+12.5%' },
+        orders: { value: Math.floor(452 * multiplier), label: 'Total Orders', trend: '+5.2%' },
+        visitors: { value: Math.floor(14205 * multiplier), label: 'Unique Visitors', trend: '-2.4%' },
+        avgOrder: { value: 1850, label: 'Avg. Order Value', trend: '+8.1%' }
+      });
+      setIsLoading(false);
+    }, 600);
+  }, [dateRange]);
 
   const recentOrders = [
-    { id: '#ORD-001', customer: 'Rahul K.', amount: '₹ 2,499', status: 'Pending', date: 'Today' },
-    { id: '#ORD-002', customer: 'Sarah J.', amount: '₹ 1,299', status: 'Shipped', date: 'Yesterday' },
-    { id: '#ORD-003', customer: 'Mohammed A.', amount: '₹ 5,999', status: 'Delivered', date: 'Jan 10' },
-    { id: '#ORD-004', customer: 'Priya S.', amount: '₹ 899', status: 'Cancelled', date: 'Jan 09' },
+    { id: '#ORD-7741', item: 'Kanchipuram Silk Saree', customer: 'Rahul K.', amount: '₹ 8,499', status: 'Pending', time: '2 min ago' },
+    { id: '#ORD-7740', item: 'Cotton Mundu Set', customer: 'Sarah J.', amount: '₹ 899', status: 'Shipped', time: '2 hours ago' },
+    { id: '#ORD-7739', item: 'Kids Festival Wear', customer: 'Mohammed A.', amount: '₹ 1,299', status: 'Delivered', time: '5 hours ago' },
+    { id: '#ORD-7738', item: 'Designer Churidar', customer: 'Priya S.', amount: '₹ 3,450', status: 'Processing', time: '1 day ago' },
+  ];
+
+  const topProducts = [
+    { name: 'Banarasi Silk Saree', sales: 120, revenue: '₹ 2,40,000' },
+    { name: 'Kerala Kasavu Mundu', sales: 85, revenue: '₹ 42,500' },
+    { name: 'Designer Salwar', sales: 64, revenue: '₹ 98,200' },
+    { name: 'Kids Frock (Red)', sales: 50, revenue: '₹ 22,500' },
   ];
 
   return (
     <div className="dashboard-page">
-      <h1 className="page-title">Dashboard Overview</h1>
-      
-      {/* Stats Grid */}
-      <div className="stats-grid">
-        {stats.map((stat, index) => (
-          <div key={index} className="stat-card">
-            <div className="stat-icon" style={{ backgroundColor: `${stat.color}20`, color: stat.color }}>
-              <span className="material-symbols-outlined">{stat.icon}</span>
-            </div>
-            <div className="stat-info">
-              <h3>{stat.value}</h3>
-              <p>{stat.title}</p>
-            </div>
-          </div>
-        ))}
+      {/* Header */}
+      <div className="page-header">
+        <div>
+           <h1 className="page-title">Dashboard Overview</h1>
+           <p className="subtitle">Welcome back, {user?.name || 'Admin'}. Here's what's happening today.</p>
+        </div>
+        <div className="controls">
+          <select value={dateRange} onChange={(e) => setDateRange(e.target.value)} className="date-select">
+            <option value="today">Today</option>
+            <option value="yesterday">Yesterday</option>
+            <option value="7d">Last 7 Days</option>
+            <option value="30d">Last 30 Days</option>
+            <option value="year">This Year</option>
+          </select>
+          <button className="primary-btn"><span className="material-symbols-outlined">download</span> Export</button>
+        </div>
       </div>
 
-      {/* Recent Orders Table */}
-      <div className="recent-orders">
-        <div className="section-header">
-          <h2>Recent Orders</h2>
-          <button className="view-all">View All</button>
+      {/* Metrics Row */}
+      <div className="metrics-grid">
+        <div className="metric-card">
+          <div className="metric-header">
+            <div className="icon-box green"><span className="material-symbols-outlined">payments</span></div>
+            <span className={`trend ${stats.revenue.trend.includes('+') ? 'up' : 'down'}`}>{stats.revenue.trend}</span>
+          </div>
+          <h3>₹ {stats.revenue.value.toLocaleString()}</h3>
+          <p>{stats.revenue.label}</p>
         </div>
-        
-        <table className="orders-table">
-          <thead>
-            <tr>
-              <th>Order ID</th>
-              <th>Customer</th>
-              <th>Amount</th>
-              <th>Date</th>
-              <th>Status</th>
-              <th>Action</th>
-            </tr>
-          </thead>
-          <tbody>
-            {recentOrders.map((order) => (
-              <tr key={order.id}>
-                <td>{order.id}</td>
-                <td>{order.customer}</td>
-                <td>{order.amount}</td>
-                <td>{order.date}</td>
-                <td>
-                  <span className={`status-badge ${order.status.toLowerCase()}`}>
-                    {order.status}
-                  </span>
-                </td>
-                <td>
-                  <button className="action-btn">View</button>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+        <div className="metric-card">
+          <div className="metric-header">
+            <div className="icon-box blue"><span className="material-symbols-outlined">shopping_bag</span></div>
+            <span className={`trend ${stats.orders.trend.includes('+') ? 'up' : 'down'}`}>{stats.orders.trend}</span>
+          </div>
+          <h3>{stats.orders.value}</h3>
+          <p>{stats.orders.label}</p>
+        </div>
+        <div className="metric-card">
+          <div className="metric-header">
+            <div className="icon-box orange"><span className="material-symbols-outlined">group</span></div>
+            <span className={`trend ${stats.visitors.trend.includes('+') ? 'up' : 'down'}`}>{stats.visitors.trend}</span>
+          </div>
+          <h3>{stats.visitors.value.toLocaleString()}</h3>
+          <p>{stats.visitors.label}</p>
+        </div>
+         <div className="metric-card">
+          <div className="metric-header">
+            <div className="icon-box purple"><span className="material-symbols-outlined">receipt_long</span></div>
+            <span className={`trend ${stats.avgOrder.trend.includes('+') ? 'up' : 'down'}`}>{stats.avgOrder.trend}</span>
+          </div>
+          <h3>₹ {stats.avgOrder.value.toLocaleString()}</h3>
+          <p>{stats.avgOrder.label}</p>
+        </div>
+      </div>
+
+      {/* Main Content Grid */}
+      <div className="content-grid">
+        {/* Left Col: Sales Chart (Mock) & Top Products */}
+        <div className="main-col">
+          <div className="card chart-card">
+            <div className="card-header">
+              <h2>Revenue Analytics</h2>
+              <button className="icon-btn"><span className="material-symbols-outlined">more_horiz</span></button>
+            </div>
+            <div className="chart-placeholder">
+              {/* CSS Simple Bar Chart Mockup */}
+              {[40, 65, 45, 80, 55, 90, 70, 85, 60, 75, 50, 95].map((h, i) => (
+                <div key={i} className="bar-group">
+                  <div className="bar" style={{ height: `${h}%` }}></div>
+                  <span className="label">{i + 1}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <div className="card">
+            <div className="card-header">
+              <h2>Top Selling Products</h2>
+              <a href="#" className="link">View All</a>
+            </div>
+            <table className="simple-table">
+              <thead>
+                <tr>
+                   <th>Product Name</th>
+                   <th>Sales</th>
+                   <th>Revenue</th>
+                </tr>
+              </thead>
+              <tbody>
+                {topProducts.map((p, i) => (
+                  <tr key={i}>
+                    <td>
+                      <div className="product-cell">
+                        <div className="p-img"></div>
+                        <span>{p.name}</span>
+                      </div>
+                    </td>
+                    <td>{p.sales}</td>
+                    <td className="revenue">{p.revenue}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        {/* Right Col: Recent Activity & Quick Actions */}
+        <div className="side-col">
+          <div className="card">
+            <div className="card-header">
+              <h2>Recent Orders</h2>
+            </div>
+            <div className="activity-feed">
+              {recentOrders.map((order, i) => (
+                <div key={i} className="activity-item">
+                  <div className={`status-dot ${order.status.toLowerCase()}`}></div>
+                  <div className="activity-info">
+                    <p className="main-text"><strong>{order.customer}</strong> ordered {order.item}</p>
+                    <p className="sub-text">{order.id} • {order.amount}</p>
+                  </div>
+                  <span className="time">{order.time}</span>
+                </div>
+              ))}
+            </div>
+             <button className="view-all-btn">View All Orders</button>
+          </div>
+
+          <div className="card quick-actions">
+             <h2>Quick Actions</h2>
+             <div className="action-grid">
+               <button><span className="material-symbols-outlined">add_box</span> Add Product</button>
+               <button><span className="material-symbols-outlined">person_add</span> Add User</button>
+               <button><span className="material-symbols-outlined">post_add</span> Create Invoice</button>
+               <button><span className="material-symbols-outlined">settings</span> Settings</button>
+             </div>
+          </div>
+        </div>
       </div>
 
       <style jsx>{`
-        .page-title {
-          font-family: var(--font-playfair);
-          font-size: 1.8rem;
-          color: #1a1a1a;
-          margin-bottom: 2rem;
-        }
+        .dashboard-page { padding-bottom: 2rem; }
+        
+        .page-header { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 2rem; flex-wrap: wrap; gap: 1rem; }
+        .page-title { font-family: var(--font-playfair); font-size: 2rem; color: #1a1a1a; margin: 0; }
+        .subtitle { color: #666; margin: 0.5rem 0 0 0; }
+        
+        .controls { display: flex; gap: 1rem; }
+        .date-select { padding: 0.6rem 1rem; border: 1px solid #ddd; border-radius: 8px; background: white; font-family: var(--font-outfit); cursor: pointer; outline: none; }
+        .primary-btn { background: #1a1a1a; color: white; border: none; padding: 0.6rem 1.2rem; border-radius: 8px; display: flex; align-items: center; gap: 0.5rem; font-weight: 500; cursor: pointer; }
+        
+        /* Metrics */
+        .metrics-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1.5rem; margin-bottom: 2rem; }
+        .metric-card { background: white; padding: 1.5rem; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.02); transition: transform 0.2s; }
+        .metric-card:hover { transform: translateY(-3px); box-shadow: 0 10px 15px rgba(0,0,0,0.05); }
+        
+        .metric-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1rem; }
+        .icon-box { width: 48px; height: 48px; border-radius: 10px; display: flex; align-items: center; justify-content: center; }
+        .icon-box.green { background: #ecfdf5; color: #10b981; }
+        .icon-box.blue { background: #eff6ff; color: #3b82f6; }
+        .icon-box.orange { background: #fff7ed; color: #f97316; }
+        .icon-box.purple { background: #f3e8ff; color: #a855f7; }
+        
+        .trend { font-size: 0.8rem; font-weight: 600; padding: 0.2rem 0.5rem; border-radius: 12px; }
+        .trend.up { background: #ecfdf5; color: #10b981; }
+        .trend.down { background: #fef2f2; color: #ef4444; }
+        
+        .metric-card h3 { font-size: 1.8rem; margin: 0; color: #1a1a1a; letter-spacing: -0.5px; }
+        .metric-card p { color: #888; margin: 0.2rem 0 0 0; font-size: 0.9rem; }
 
-        /* Stats Grid */
-        .stats-grid {
-          display: grid;
-          grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-          gap: 1.5rem;
-          margin-bottom: 2rem;
-        }
+        /* Content Layout */
+        .content-grid { display: grid; grid-template-columns: 2fr 1fr; gap: 1.5rem; }
+        @media (max-width: 1024px) { .content-grid { grid-template-columns: 1fr; } }
+        
+        .main-col { display: flex; flex-direction: column; gap: 1.5rem; }
+        .side-col { display: flex; flex-direction: column; gap: 1.5rem; }
+        
+        .card { background: white; border-radius: 12px; padding: 1.5rem; box-shadow: 0 2px 4px rgba(0,0,0,0.02); }
+        .card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; }
+        .card-header h2 { font-size: 1.1rem; margin: 0; color: #1a1a1a; font-weight: 600; }
+        .link { color: #d32f2f; font-size: 0.9rem; text-decoration: none; font-weight: 500; }
+        .icon-btn { border: none; background: none; color: #999; cursor: pointer; }
 
-        .stat-card {
-          background: white;
-          padding: 1.5rem;
-          border-radius: 12px;
-          display: flex;
-          align-items: center;
-          gap: 1rem;
-          box-shadow: 0 4px 6px rgba(0,0,0,0.02);
-          transition: transform 0.2s;
-        }
+        /* Chart Mock */
+        .chart-placeholder { height: 250px; display: flex; align-items: flex-end; justify-content: space-between; padding-top: 1rem; }
+        .bar-group { display: flex; flex-direction: column; align-items: center; gap: 0.5rem; height: 100%; justify-content: flex-end; width: 6%; }
+        .bar { width: 100%; background: #d32f2f; border-radius: 4px 4px 0 0; opacity: 0.8; transition: height 0.5s ease; }
+        .bar:hover { opacity: 1; }
+        .label { font-size: 0.75rem; color: #999; }
+        
+        /* Table */
+        .simple-table { width: 100%; border-collapse: collapse; }
+        .simple-table th { text-align: left; color: #888; font-weight: 500; font-size: 0.85rem; padding-bottom: 1rem; border-bottom: 1px solid #eee; }
+        .simple-table td { padding: 1rem 0; border-bottom: 1px solid #f9f9f9; font-size: 0.95rem; }
+        .simple-table tr:last-child td { border-bottom: none; }
+        
+        .product-cell { display: flex; align-items: center; gap: 0.8rem; }
+        .p-img { width: 32px; height: 32px; background: #f0f0f0; border-radius: 4px; }
+        .revenue { font-weight: 600; color: #1a1a1a; }
 
-        .stat-card:hover {
-          transform: translateY(-2px);
-        }
+        /* Activity Feed */
+        .activity-feed { display: flex; flex-direction: column; gap: 1.2rem; }
+        .activity-item { display: flex; align-items: flex-start; gap: 1rem; }
+        .status-dot { width: 10px; height: 10px; border-radius: 50%; margin-top: 6px; flex-shrink: 0; }
+        .status-dot.pending { background: #f59e0b; }
+        .status-dot.shipped { background: #3b82f6; }
+        .status-dot.delivered { background: #10b981; }
+        .status-dot.processing { background: #8b5cf6; }
+        
+        .activity-info { flex: 1; }
+        .main-text { margin: 0; font-size: 0.9rem; color: #333; line-height: 1.4; }
+        .sub-text { margin: 0.2rem 0 0 0; font-size: 0.8rem; color: #888; }
+        .time { font-size: 0.75rem; color: #aaa; white-space: nowrap; }
+        
+        .view-all-btn { width: 100%; margin-top: 1.5rem; padding: 0.8rem; border: 1px solid #eee; background: white; border-radius: 8px; color: #666; font-weight: 500; cursor: pointer; transition: all 0.2s; }
+        .view-all-btn:hover { background: #f9f9f9; color: #333; }
 
-        .stat-icon {
-          width: 50px;
-          height: 50px;
-          border-radius: 10px;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-        }
-
-        .stat-info h3 {
-          font-size: 1.5rem;
-          margin: 0;
-          color: #1a1a1a;
-        }
-
-        .stat-info p {
-          color: #666;
-          margin: 0;
-          font-size: 0.9rem;
-        }
-
-        /* Recent Orders */
-        .recent-orders {
-          background: white;
-          border-radius: 12px;
-          padding: 1.5rem;
-          box-shadow: 0 4px 6px rgba(0,0,0,0.02);
-        }
-
-        .section-header {
-          display: flex;
-          justify-content: space-between;
-          align-items: center;
-          margin-bottom: 1.5rem;
-        }
-
-        .section-header h2 {
-          font-size: 1.25rem;
-          margin: 0;
-        }
-
-        .view-all {
-          background: none;
-          border: none;
-          color: #d32f2f;
-          cursor: pointer;
-          font-weight: 600;
-        }
-
-        .orders-table {
-          width: 100%;
-          border-collapse: collapse;
-        }
-
-        .orders-table th, .orders-table td {
-          text-align: left;
-          padding: 1rem;
-          border-bottom: 1px solid #f0f0f0;
-        }
-
-        .orders-table th {
-          color: #666;
-          font-weight: 500;
-          font-size: 0.9rem;
-        }
-
-        .status-badge {
-          padding: 0.25rem 0.75rem;
-          border-radius: 20px;
-          font-size: 0.8rem;
-          font-weight: 500;
-        }
-
-        .status-badge.pending { background: #fff7ed; color: #c2410c; }
-        .status-badge.shipped { background: #eff6ff; color: #1d4ed8; }
-        .status-badge.delivered { background: #ecfdf5; color: #047857; }
-        .status-badge.cancelled { background: #fef2f2; color: #b91c1c; }
-
-        .action-btn {
-          padding: 0.4rem 0.8rem;
-          background: #f4f4f5;
-          border: none;
-          border-radius: 4px;
-          cursor: pointer;
-          font-size: 0.85rem;
-          transition: background 0.2s;
-        }
-
-        .action-btn:hover {
-          background: #e4e4e7;
-        }
+        /* Quick Actions */
+        .quick-actions { background: linear-gradient(135deg, #1a1a1a 0%, #333 100%); color: white; }
+        .quick-actions h2 { color: white; margin-bottom: 1.5rem; }
+        .action-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+        .action-grid button { border: none; background: rgba(255,255,255,0.1); color: white; padding: 1rem; border-radius: 8px; display: flex; flex-direction: column; align-items: center; gap: 0.5rem; cursor: pointer; transition: background 0.2s; font-size: 0.9rem; }
+        .action-grid button:hover { background: rgba(255,255,255,0.2); }
+        .action-grid span { font-size: 1.5rem; color: #ef5350; }
       `}</style>
     </div>
   );
