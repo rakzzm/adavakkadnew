@@ -33,7 +33,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
           type: 'sub',
           subItems: [
             { name: 'Order List', path: '/admin/orders' },
-            { name: 'Order Details', path: '/admin/orders/details' },
+            { name: 'Returns', path: '/admin/orders/returns' },
           ]
         },
         { 
@@ -42,7 +42,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
           type: 'sub',
           subItems: [
             { name: 'Product List', path: '/admin/products' },
-            { name: 'Add Product', path: '/admin/products/add' },
+            { name: 'Inventory', path: '/admin/products/inventory' },
           ]
         },
         { 
@@ -51,7 +51,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
           type: 'sub',
           subItems: [
             { name: 'Customer List', path: '/admin/customers' },
-            { name: 'Customer Details', path: '/admin/customers/details' },
+            { name: 'Segments', path: '/admin/customers/segments' },
           ] 
         },
         { 
@@ -72,8 +72,8 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
       title: 'Support Apps',
       items: [
         { name: 'Chats', icon: 'chat', type: 'sub', subItems: [{ name: 'Inbox', path: '/admin/chat' }] },
-        { name: 'Email', icon: 'mail', type: 'sub', subItems: [{ name: 'Compose', path: '/admin/email/compose' }] },
-        { name: 'Todo App', icon: 'check_circle', type: 'sub', subItems: [{ name: 'Tasks', path: '/admin/todo' }] },
+        { name: 'Email', icon: 'mail', type: 'sub', subItems: [{ name: 'Inbox', path: '/admin/email' }] },
+        { name: 'Todo App', icon: 'check_circle', type: 'sub', subItems: [{ name: 'Task List', path: '/admin/todo' }] },
       ]
     },
     {
@@ -82,15 +82,15 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
         { name: 'Profile', icon: 'person', type: 'sub', subItems: [{ name: 'My Profile', path: '/admin/profile' }] },
         { name: 'User', icon: 'manage_accounts', type: 'sub', subItems: [{ name: 'User List', path: '/admin/users' }] },
         { name: 'Authentication', icon: 'lock', type: 'sub', subItems: [{ name: 'Login', path: '/login' }] },
-        { name: 'Error Pages', icon: 'error', type: 'sub', subItems: [{ name: '404', path: '/404' }] },
-        { name: 'Setting', icon: 'settings', type: 'sub', subItems: [{ name: 'General', path: '/admin/settings' }] },
+        { name: 'Error Pages', icon: 'error', type: 'sub', subItems: [{ name: '404 Error', path: '/404' }] },
+        { name: 'Setting', icon: 'settings', type: 'sub', subItems: [{ name: 'General Settings', path: '/admin/settings' }] },
         { name: 'FAQ', icon: 'help', type: 'sub', subItems: [{ name: 'FAQ List', path: '/admin/faq' }] },
       ]
     },
     {
       title: 'User Interface',
       items: [
-        { name: 'Components', icon: 'layers', type: 'sub', subItems: [{ name: 'Buttons', path: '/admin/ui/buttons' }] },
+        { name: 'Components', icon: 'layers', type: 'sub', subItems: [{ name: 'UI Elements', path: '/admin/ui' }] },
       ]
     }
   ];
