@@ -61,9 +61,80 @@ export default function AdminInvoices() {
   };
 
   const handleDownload = (invoice: Invoice) => {
-    // Simulating PDF download
-    alert(`Downloading PDF for Invoice ${invoice.id}...`);
-    // In a real app, this would generate a PDF blob or open a print window
+    // Generate a printable window
+    const printWindow = window.open('', '_blank');
+    if (!printWindow) return alert('Please allow popups to download invoices');
+
+    const htmlContent = `
+      <html>
+        <head>
+          <title>Invoice ${invoice.id}</title>
+          <style>
+            body { font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; padding: 40px; color: #333; }
+            .header { display: flex; justify-content: space-between; margin-bottom: 40px; border-bottom: 1px solid #eee; padding-bottom: 20px; }
+            .company h1 { margin: 0; color: #d32f2f; }
+            .meta { text-align: right; }
+            .invoice-title { font-size: 24px; font-weight: bold; margin-bottom: 10px; }
+            .bill-to { margin-bottom: 30px; }
+            .table { width: 100%; border-collapse: collapse; margin-bottom: 30px; }
+            .table th { text-align: left; padding: 10px; border-bottom: 2px solid #ddd; }
+            .table td { padding: 10px; border-bottom: 1px solid #eee; }
+            .total-row { font-weight: bold; font-size: 18px; }
+            .footer { margin-top: 50px; text-align: center; color: #777; font-size: 12px; }
+          </style>
+        </head>
+        <body>
+          <div class="header">
+            <div class="company">
+              <h1>Advakkad Collections</h1>
+              <p>Wedding Center<br>Kerala, India</p>
+            </div>
+            <div class="meta">
+              <div class="invoice-title">INVOICE</div>
+              <p><strong>ID:</strong> ${invoice.id}</p>
+              <p><strong>Date:</strong> ${invoice.date}</p>
+              <p><strong>Status:</strong> ${invoice.status}</p>
+            </div>
+          </div>
+
+          <div class="bill-to">
+            <h3>Bill To:</h3>
+            <p>${invoice.customer}</p>
+            <p>Order Ref: ${invoice.orderId}</p>
+          </div>
+
+          <table class="table">
+            <thead>
+              <tr>
+                <th>Description</th>
+                <th>Amount</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Order Charges (${invoice.orderId})</td>
+                <td>₹ ${invoice.amount.toLocaleString()}</td>
+              </tr>
+              <tr class="total-row">
+                <td style="text-align: right">Total</td>
+                <td>₹ ${invoice.amount.toLocaleString()}</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <div class="footer">
+            <p>Thank you for your business!</p>
+            <p>For questions, contact support@advakkad.com</p>
+          </div>
+          <script>
+            window.onload = function() { window.print(); }
+          </script>
+        </body>
+      </html>
+    `;
+
+    printWindow.document.write(htmlContent);
+    printWindow.document.close();
   };
 
   return (
