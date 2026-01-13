@@ -73,6 +73,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
       items: [
         { name: 'Communications', icon: 'forum', type: 'sub', subItems: [{ name: 'Chat Inbox', path: '/admin/chat' }, { name: 'Email Inbox', path: '/admin/email' }] },
         { name: 'Tasks', icon: 'checklist', type: 'sub', subItems: [{ name: 'To-Do List', path: '/admin/todo' }] },
+        { name: 'Finance', icon: 'calculate', type: 'sub', subItems: [{ name: 'Tax Calculator', path: '/admin/tax' }] },
       ]
     },
     {
