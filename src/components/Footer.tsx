@@ -32,10 +32,11 @@ export default function Footer() {
             <ul className="footer-links">
               <li><Link href="/policies/privacy-policy">Privacy Policy</Link></li>
               <li><Link href="/policies/refund-policy">Refund Policy</Link></li>
-              <li><Link href="/policies/delivery-services">Delivery Services</Link></li>
-              <li><Link href="/policies/promotions">Promotions</Link></li>
-            </ul>
-          </div>
+              <li><a href="#" className="hover:text-white transition-colors">Returns & Exchanges</a></li>
+            <li><a href="#" className="hover:text-white transition-colors">Terms & Conditions</a></li>
+            <li><a href="/faq" className="hover:text-white transition-colors">FAQ</a></li>
+          </ul>
+        </div>
         </div>
 
         <div className="footer-bottom">
