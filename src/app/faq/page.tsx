@@ -1,8 +1,6 @@
 'use client';
 
 import { useFAQ } from '@/context/FAQContext';
-import Navbar from '@/components/Navbar';
-import Footer from '@/components/Footer';
 
 export default function FAQPage() {
   const { faqs } = useFAQ();
@@ -11,7 +9,6 @@ export default function FAQPage() {
 
   return (
     <>
-      <Navbar />
       <main className="faq-page">
         <header className="page-hero">
           <div className="container">
@@ -47,7 +44,6 @@ export default function FAQPage() {
           )}
         </section>
       </main>
-      <Footer />
 
       <style jsx>{`
         .faq-page { min-height: 80vh; background: #f9fafb; padding-bottom: 4rem; }
