@@ -15,6 +15,14 @@ export default function SocialPage() {
   const [showLoginModal, setShowLoginModal] = useState(false);
   const [isLoggingIn, setIsLoggingIn] = useState(false);
 
+  const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files[0]) {
+      const selectedFile = e.target.files[0];
+      setFile(selectedFile);
+      setPreviewUrl(URL.createObjectURL(selectedFile));
+    }
+  };
+
   const handleConnectClick = () => {
     if (isConnected) {
       if (confirm('Are you sure you want to disconnect?')) {
