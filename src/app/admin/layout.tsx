@@ -138,7 +138,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
         
         .sidebar-header {
           padding: 1rem;
-          height: 100px;
+          height: 140px;
           display: flex;
           align-items: center;
           justify-content: center;
@@ -192,10 +192,18 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
           text-decoration: none;
           transition: all 0.3s ease;
           border-radius: 8px;
-          font-size: 1rem;
+          font-size: 1.1rem;
           font-weight: 500;
           user-select: none;
           position: relative;
+        }
+
+        .admin-sidebar .nav-item {
+          color: #FFFFFF !important;
+        }
+
+        .admin-sidebar .nav-item * {
+          color: #FFFFFF !important;
         }
 
         .nav-item:hover {
@@ -209,9 +217,15 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
           font-weight: 600;
         }
 
-        .nav-item .icon { font-size: 1.5rem; min-width: 28px; transition: color 0.2s; color: #FFFFFF !important; }
+        .nav-item .icon { 
+          font-size: 1.6rem; 
+          min-width: 28px; 
+          transition: color 0.2s; 
+          color: #FFFFFF !important; 
+        }
         .nav-item.active .icon { color: #E91E63 !important; }
-        .nav-item .nav-text { color: #FFFFFF !important; }
+        .nav-item .nav-text { color: #FFFFFF !important; font-size: 1.1rem; }
+        .nav-item span { color: #FFFFFF !important; }
         
         .chevron { font-size: 1.2rem; color: #666; transition: transform 0.3s ease; }
         .nav-item.expanded .chevron { transform: rotate(180deg); color: #ef5350; }
