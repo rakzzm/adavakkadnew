@@ -11,17 +11,27 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
   const { logout, user } = useAuth();
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
 
-  // Flat menu structure matching reference design
+  // Comprehensive menu with all features
   const menuItems = [
     { name: 'Dashboard', icon: 'grid_view', path: '/admin/dashboard' },
     { name: 'Products', icon: 'inventory_2', path: '/admin/products' },
+    { name: 'Inventory', icon: 'warehouse', path: '/admin/products/inventory' },
     { name: 'Orders', icon: 'shopping_cart', path: '/admin/orders' },
+    { name: 'Returns', icon: 'assignment_return', path: '/admin/orders/returns' },
     { name: 'Customers', icon: 'group', path: '/admin/customers' },
-    { name: 'Reports', icon: 'bar_chart', path: '/admin/dashboard' },
+    { name: 'Segments', icon: 'workspaces', path: '/admin/customers/segments' },
+    { name: 'Buyers', icon: 'storefront', path: '/admin/buyers' },
+    { name: 'Invoices', icon: 'receipt_long', path: '/admin/invoices' },
     { name: 'Chat', icon: 'forum', path: '/admin/chat' },
-    { name: 'E-Invoicing', icon: 'receipt_long', path: '/admin/invoices' },
+    { name: 'Email', icon: 'email', path: '/admin/email' },
+    { name: 'To-Do List', icon: 'checklist', path: '/admin/todo' },
+    { name: 'Tax Calculator', icon: 'calculate', path: '/admin/tax' },
     { name: 'Social Media', icon: 'share', path: '/admin/social' },
+    { name: 'Profile', icon: 'manage_accounts', path: '/admin/profile' },
+    { name: 'Users', icon: 'admin_panel_settings', path: '/admin/users' },
     { name: 'Settings', icon: 'settings', path: '/admin/settings' },
+    { name: 'FAQ Manager', icon: 'help', path: '/admin/faq' },
+    { name: 'UI Components', icon: 'style', path: '/admin/ui' },
   ];
 
   return (
