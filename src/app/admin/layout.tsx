@@ -31,7 +31,6 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
     { name: 'Users', icon: 'admin_panel_settings', path: '/admin/users' },
     { name: 'Settings', icon: 'settings', path: '/admin/settings' },
     { name: 'FAQ Manager', icon: 'help', path: '/admin/faq' },
-    { name: 'UI Components', icon: 'style', path: '/admin/ui' },
   ];
 
   return (
@@ -191,7 +190,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
           align-items: center;
           gap: 1rem;
           padding: 1rem 1.25rem;
-          color: #FFFFFF;
+          color: #FFFFFF !important;
           text-decoration: none;
           transition: all 0.3s ease;
           border-radius: 8px;
@@ -203,17 +202,18 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
 
         .nav-item:hover {
           background: rgba(233, 30, 99, 0.1);
-          color: #FFFFFF;
+          color: #FFFFFF !important;
         }
 
         .nav-item.active {
           background: linear-gradient(90deg, #3498db 0%, #2980b9 100%);
-          color: #FFFFFF;
+          color: #FFFFFF !important;
           font-weight: 600;
         }
 
-        .nav-item .icon { font-size: 1.5rem; min-width: 28px; transition: color 0.2s; }
-        .nav-item.active .icon { color: #E91E63; }
+        .nav-item .icon { font-size: 1.5rem; min-width: 28px; transition: color 0.2s; color: #FFFFFF !important; }
+        .nav-item.active .icon { color: #E91E63 !important; }
+        .nav-item .nav-text { color: #FFFFFF !important; }
         
         .chevron { font-size: 1.2rem; color: #666; transition: transform 0.3s ease; }
         .nav-item.expanded .chevron { transform: rotate(180deg); color: #ef5350; }
