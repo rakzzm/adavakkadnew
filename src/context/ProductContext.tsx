@@ -218,7 +218,7 @@ const INITIAL_PRODUCTS: Product[] = [
 ];
 
 export function ProductProvider({ children }: { children: ReactNode }) {
-  const [products, setProducts] = useLocalStorage<Product[]>('advakkad_products_v7', INITIAL_PRODUCTS);
+  const [products, setProducts] = useLocalStorage<Product[]>('advakkad_products_v8', INITIAL_PRODUCTS);
 
   const addProduct = (newProduct: Omit<Product, 'id'>) => {
     const id = Date.now(); // Simple ID generation
