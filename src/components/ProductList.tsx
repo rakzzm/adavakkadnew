@@ -13,15 +13,27 @@ export default function ProductList() {
   const { products } = useProducts(); // Use Context Data
   
   const [filter, setFilter] = useState('all');
+  const [sortBy, setSortBy] = useState('featured');
   const [search, setSearch] = useState('');
   const [selectedSizes, setSelectedSizes] = useState<{ [key: number]: string }>({});
   const [selectedAges, setSelectedAges] = useState<{ [key: number]: string }>({});
+  const [wishlist, setWishlist] = useState<number[]>([]);
 
   const filteredProducts = products.filter(product => {
     const matchesCategory = filter === 'all' || product.category === filter;
     const matchesSearch = product.name.toLowerCase().includes(search.toLowerCase());
     return matchesCategory && matchesSearch;
+  }).sort((a, b) => {
+    if (sortBy === 'price-low') return a.price - b.price;
+    if (sortBy === 'price-high') return b.price - a.price;
+    return 0;
   });
+
+  const toggleWishlist = (id: number) => {
+    setWishlist(prev => 
+      prev.includes(id) ? prev.filter(item => item !== id) : [...prev, id]
+    );
+  };
 
   const handleSizeChange = (productId: number, size: string) => {
     setSelectedSizes(prev => ({ ...prev, [productId]: size }));
@@ -72,6 +84,18 @@ export default function ProductList() {
       <div className="filter-bar">
         <div className="filter-container">
           <div className="filter-group">
+            <label htmlFor="searchInput">Search:</label>
+            <input 
+              type="text" 
+              id="searchInput" 
+              className="filter-input" 
+              placeholder="Search products..."
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+            />
+          </div>
+
+          <div className="filter-group">
             <label htmlFor="categoryFilter">Category:</label>
             <select 
               id="categoryFilter" 
@@ -91,15 +115,17 @@ export default function ProductList() {
           </div>
 
           <div className="filter-group">
-            <label htmlFor="searchInput">Search:</label>
-            <input 
-              type="text" 
-              id="searchInput" 
-              className="filter-input" 
-              placeholder="Search products..."
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-            />
+            <label htmlFor="sortFilter">Sort By:</label>
+            <select 
+              id="sortFilter" 
+              className="filter-select"
+              value={sortBy}
+              onChange={(e) => setSortBy(e.target.value)}
+            >
+              <option value="featured">Featured</option>
+              <option value="price-low">Price: Low to High</option>
+              <option value="price-high">Price: High to Low</option>
+            </select>
           </div>
         </div>
       </div>
@@ -107,6 +133,15 @@ export default function ProductList() {
       <div className="products-grid" id="productsGrid" style={{ display: filteredProducts.length ? 'grid' : 'none' }}>
         {filteredProducts.map(product => (
           <div key={product.id} className="product-card" data-category={product.category}>
+            <button 
+              className={`wishlist-btn ${wishlist.includes(product.id) ? 'active' : ''}`}
+              onClick={() => toggleWishlist(product.id)}
+              aria-label="Add to wishlist"
+            >
+              <span className="material-symbols-outlined">
+                {wishlist.includes(product.id) ? 'favorite' : 'favorite_border'}
+              </span>
+            </button>
             <div className="product-image-placeholder">
               <Link href={`/products/${product.id}`} style={{ display: 'block', width: '100%', height: '100%' }}>
                 {(product.image.startsWith('/') || product.image.startsWith('data:')) ? (
