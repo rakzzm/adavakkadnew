@@ -14,7 +14,16 @@ const galleryImages = [
   { src: '/Gallery/Gallery_Update_7.png', title: 'Store Ambiance', description: 'Interior View', category: 'store', type: 'normal' },
   { src: '/Gallery/Gallery_Update_8.png', title: 'Exclusive Design', description: 'Premium Wear', category: 'collections', type: 'wide' },
   { src: '/Gallery/Gallery_Update_9.png', title: 'Fashion Trends', description: 'Modern Styles', category: 'collections', type: 'tall' },
-  { src: '/Gallery/Gallery_Update_10.png', title: 'Collection Highlight', description: 'Featured Item', category: 'collections', type: 'normal' }
+  { src: '/Gallery/Gallery_Update_10.png', title: 'Collection Highlight', description: 'Featured Item', category: 'collections', type: 'normal' },
+  { src: '/Gallery/Gallery_Update_11.png', title: 'Festive Special', description: 'Traditional Attire', category: 'collections', type: 'normal' },
+  { src: '/Gallery/Gallery_Update_12.png', title: 'Wedding Collection', description: 'Bridal & Groom Wear', category: 'collections', type: 'wide' },
+  { src: '/Gallery/Gallery_Update_13.png', title: 'Casual Chic', description: 'Everyday Fashion', category: 'collections', type: 'normal' },
+  { src: '/Gallery/Gallery_Update_14.png', title: 'Designer Series', description: 'Exclusive Cuts', category: 'collections', type: 'tall' },
+  { src: '/Gallery/Gallery_Update_15.png', title: 'Summer Vibes', description: 'Light & Airy Fabrics', category: 'collections', type: 'normal' },
+  { src: '/Gallery/Gallery_Update_16.png', title: 'Winter Warmth', description: 'Cozy Collections', category: 'collections', type: 'wide' },
+  { src: '/Gallery/Gallery_Update_17.png', title: 'Kids Corner', description: 'Playful Designs', category: 'collections', type: 'normal' },
+  { src: '/Gallery/Gallery_Update_18.png', title: 'Accessory Line', description: 'Perfect Matches', category: 'collections', type: 'tall' },
+  { src: '/Gallery/Gallery_Update_19.png', title: 'Premium Silk', description: 'Authentic Weaves', category: 'collections', type: 'normal' }
 ];
 
 export default function GalleryGrid() {
