@@ -84,6 +84,20 @@ export default function AdminSettings() {
             <span className="material-symbols-outlined">style</span>
             UI Components
           </button>
+          <button 
+            className={`tab-btn ${activeTab === 'profile' ? 'active' : ''}`}
+            onClick={() => setActiveTab('profile')}
+          >
+            <span className="material-symbols-outlined">manage_accounts</span>
+            Profile
+          </button>
+          <button 
+            className={`tab-btn ${activeTab === 'users' ? 'active' : ''}`}
+            onClick={() => setActiveTab('users')}
+          >
+            <span className="material-symbols-outlined">admin_panel_settings</span>
+            Users
+          </button>
         </div>
 
         {/* Content */}
@@ -230,6 +244,32 @@ export default function AdminSettings() {
                   <Link href="/admin/ui" className="btn-ui-components">
                     <span className="material-symbols-outlined">style</span>
                     Open UI Components Library
+                  </Link>
+                </div>
+              </div>
+            )}
+
+            {activeTab === 'profile' && (
+              <div className="form-section fade-in">
+                <h3 className="section-title">Profile Management</h3>
+                <p className="section-description">Manage your admin profile and preferences</p>
+                <div className="ui-components-link">
+                  <Link href="/admin/profile" className="btn-ui-components">
+                    <span className="material-symbols-outlined">manage_accounts</span>
+                    Open Profile Settings
+                  </Link>
+                </div>
+              </div>
+            )}
+
+            {activeTab === 'users' && (
+              <div className="form-section fade-in">
+                <h3 className="section-title">User Management</h3>
+                <p className="section-description">Manage user access and permissions</p>
+                <div className="ui-components-link">
+                  <Link href="/admin/users" className="btn-ui-components">
+                    <span className="material-symbols-outlined">admin_panel_settings</span>
+                    Open User Management
                   </Link>
                 </div>
               </div>

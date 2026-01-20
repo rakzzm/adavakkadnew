@@ -27,8 +27,6 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
     { name: 'To-Do List', icon: 'checklist', path: '/admin/todo' },
     { name: 'Tax Calculator', icon: 'calculate', path: '/admin/tax' },
     { name: 'Social Media', icon: 'share', path: '/admin/social' },
-    { name: 'Profile', icon: 'manage_accounts', path: '/admin/profile' },
-    { name: 'Users', icon: 'admin_panel_settings', path: '/admin/users' },
     { name: 'Settings', icon: 'settings', path: '/admin/settings' },
     { name: 'FAQ Manager', icon: 'help', path: '/admin/faq' },
   ];
