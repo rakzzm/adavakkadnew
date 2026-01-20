@@ -10,98 +10,18 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
   const pathname = usePathname();
   const { logout, user } = useAuth();
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
-  const [expandedMenus, setExpandedMenus] = useState<Record<string, boolean>>({
-    'Order': false,
-    'Products': false,
-    'Customer': false
-  });
 
-  const toggleMenu = (name: string) => {
-    setExpandedMenus(prev => ({
-      ...prev,
-      [name]: !prev[name]
-    }));
-  };
-
-  const menuGroups = [
-    {
-      title: 'Sales Management',
-      items: [
-        { name: 'Dashboard', icon: 'grid_view', path: '/admin/dashboard', type: 'link' },
-        { 
-          name: 'Orders', 
-          icon: 'local_mall', 
-          type: 'sub',
-          subItems: [
-            { name: 'Order List', path: '/admin/orders' },
-            { name: 'Returns', path: '/admin/orders/returns' },
-          ]
-        },
-        { 
-          name: 'Products', 
-          icon: 'checkroom', 
-          type: 'sub',
-          subItems: [
-            { name: 'Product List', path: '/admin/products' },
-            { name: 'Inventory', path: '/admin/products/inventory' },
-          ]
-        },
-        { 
-          name: 'Customers', 
-          icon: 'sentiment_satisfied', 
-          type: 'sub',
-          subItems: [
-            { name: 'Customer List', path: '/admin/customers' },
-            { name: 'Segments', path: '/admin/customers/segments' },
-          ] 
-        },
-        { 
-          name: 'Buyers', 
-          icon: 'storefront', 
-          type: 'sub',
-          subItems: [{ name: 'Buyer List', path: '/admin/buyers' }] 
-        },
-        { 
-          name: 'Invoices', 
-          icon: 'receipt_long', 
-          type: 'sub',
-          subItems: [{ name: 'Invoice List', path: '/admin/invoices' }] 
-        },
-      ]
-    },
-    {
-      title: 'Support Apps',
-      items: [
-        { name: 'Communications', icon: 'forum', type: 'sub', subItems: [{ name: 'Chat Inbox', path: '/admin/chat' }, { name: 'Email Inbox', path: '/admin/email' }] },
-        { name: 'Tasks', icon: 'checklist', type: 'sub', subItems: [{ name: 'To-Do List', path: '/admin/todo' }] },
-        { name: 'Finance', icon: 'calculate', type: 'sub', subItems: [{ name: 'Tax Calculator', path: '/admin/tax' }] },
-      ]
-    },
-    {
-      title: "Marketing",
-      items: [
-        { name: "Social Media", icon: "share", path: "/admin/social", type: 'link' }
-      ]
-    },
-    {
-      title: 'System',
-      items: [
-        { name: 'Management', icon: 'manage_accounts', type: 'sub', subItems: [
-          { name: 'My Profile', path: '/admin/profile' },
-          { name: 'User Access', path: '/admin/users' }
-        ]},
-        { name: 'Configuration', icon: 'tune', type: 'sub', subItems: [
-          { name: 'General Settings', path: '/admin/settings' },
-          { name: 'FAQ Manager', path: '/admin/faq' }
-        ]},
-      ]
-    },
-    {
-      title: 'Interface',
-      items: [
-        { name: 'UI Components', icon: 'style', type: 'sub', subItems: [{ name: 'Elements Guide', path: '/admin/ui' }] },
-      ]
-    }
+  // Flat menu structure matching reference design
+  const menuItems = [
+    { name: 'Dashboard', icon: 'grid_view', path: '/admin/dashboard' },
+    { name: 'Products', icon: 'inventory_2', path: '/admin/products' },
+    { name: 'Orders', icon: 'shopping_cart', path: '/admin/orders' },
+    { name: 'Customers', icon: 'group', path: '/admin/customers' },
+    { name: 'Reports', icon: 'bar_chart', path: '/admin/dashboard' },
+    { name: 'Chat', icon: 'forum', path: '/admin/chat' },
+    { name: 'E-Invoicing', icon: 'receipt_long', path: '/admin/invoices' },
+    { name: 'Social Media', icon: 'share', path: '/admin/social' },
+    { name: 'Settings', icon: 'settings', path: '/admin/settings' },
   ];
 
   return (
@@ -120,46 +40,15 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
         </div>
 
         <nav className="sidebar-nav">
-          {menuGroups.map((group, gIdx) => (
-            <div key={gIdx} className="menu-group">
-              <h3 className="group-title">{group.title}</h3>
-              {group.items.map((item, iIdx) => (
-                <div key={iIdx} className="menu-item-container">
-                  {item.type === 'link' ? (
-                    <Link 
-                      href={item.path || '#'}
-                      className={`nav-item ${pathname === item.path ? 'active' : ''}`}
-                    >
-                      <span className="material-symbols-outlined icon">{item.icon}</span>
-                      <span className="nav-text">{item.name}</span>
-                    </Link>
-                  ) : (
-                    <>
-                      <div 
-                        className={`nav-item ${expandedMenus[item.name] ? 'expanded' : ''}`}
-                        onClick={() => toggleMenu(item.name)}
-                        style={{ cursor: 'pointer', justifyContent: 'space-between' }}
-                      >
-                         <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
-                           <span className="material-symbols-outlined icon">{item.icon}</span>
-                           <span className="nav-text">{item.name}</span>
-                         </div>
-                         <span className="material-symbols-outlined chevron">expand_more</span>
-                      </div>
-                      {/* Submenu */}
-                      <div className={`submenu ${expandedMenus[item.name] ? 'open' : ''}`}>
-                        {item.subItems?.map((sub, sIdx) => (
-                          <Link key={sIdx} href={sub.path} className="sub-nav-item">
-                            <span className="dot"></span>
-                            <span>{sub.name}</span>
-                          </Link>
-                        ))}
-                      </div>
-                    </>
-                  )}
-                </div>
-              ))}
-            </div>
+          {menuItems.map((item, idx) => (
+            <Link 
+              key={idx}
+              href={item.path}
+              className={`nav-item ${pathname === item.path ? 'active' : ''}`}
+            >
+              <span className="material-symbols-outlined icon">{item.icon}</span>
+              <span className="nav-text">{item.name}</span>
+            </Link>
           ))}
         </nav>
 
@@ -182,8 +71,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
               <span className="material-symbols-outlined">menu_open</span>
             </button>
             <h1 className="header-title">
-              {menuGroups.flatMap(g => g.items).find(i => i.path === pathname)?.name || 
-               menuGroups.flatMap(g => g.items).flatMap(i => i.subItems || []).find(s => s.path === pathname)?.name || 'Dashboard'}
+              {menuItems.find(i => i.path === pathname)?.name || 'Dashboard'}
             </h1>
           </div>
           <div className="user-profile">
@@ -214,7 +102,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
 
         /* Sidebar Styles */
         .admin-sidebar {
-          background: linear-gradient(180deg, #111111 0%, #1a1a1a 100%);
+          background: #2C3E50;
           color: white;
           width: 280px;
           transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
@@ -272,7 +160,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
         /* .brand-text h2 { margin: 0; font-family: var(--font-playfair); font-size: 1.4rem; letter-spacing: 0.5px; white-space: nowrap; } */
         /* .brand-text p { margin: 0; font-size: 0.75rem; color: #888; text-transform: uppercase; letter-spacing: 1px; white-space: nowrap; } */
 
-        .sidebar-nav { flex: 1; padding: 1.5rem 1rem; }
+        .sidebar-nav { flex: 1; padding: 2rem 1rem; display: flex; flex-direction: column; gap: 0.5rem; }
         .menu-group { margin-bottom: 2rem; }
         .group-title {
           font-size: 0.7rem;
@@ -289,29 +177,31 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
         .nav-item {
           display: flex;
           align-items: center;
-          padding: 0.8rem 1rem;
-          color: #a3a3a3;
+          gap: 1rem;
+          padding: 1rem 1.25rem;
+          color: #FFFFFF;
           text-decoration: none;
-          transition: all 0.2s ease;
+          transition: all 0.3s ease;
           border-radius: 8px;
-          font-size: 0.95rem;
+          font-size: 1rem;
           font-weight: 500;
           user-select: none;
+          position: relative;
         }
 
         .nav-item:hover {
-          background-color: rgba(255,255,255,0.05);
-          color: white;
+          background: rgba(233, 30, 99, 0.1);
+          color: #FFFFFF;
         }
 
-        .nav-item.active, .nav-item.expanded {
-          background: linear-gradient(90deg, rgba(211, 47, 47, 0.15), rgba(211, 47, 47, 0.05));
-          color: #ef5350;
+        .nav-item.active {
+          background: linear-gradient(90deg, #3498db 0%, #2980b9 100%);
+          color: #FFFFFF;
           font-weight: 600;
         }
 
-        .nav-item .icon { font-size: 1.3rem; min-width: 24px; transition: color 0.2s; }
-        .nav-item.active .icon { color: #d32f2f; }
+        .nav-item .icon { font-size: 1.5rem; min-width: 28px; transition: color 0.2s; }
+        .nav-item.active .icon { color: #E91E63; }
         
         .chevron { font-size: 1.2rem; color: #666; transition: transform 0.3s ease; }
         .nav-item.expanded .chevron { transform: rotate(180deg); color: #ef5350; }
@@ -351,24 +241,24 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
         
         .sub-nav-item:hover .dot { background-color: #d32f2f; transform: scale(1.2); }
 
-        .sidebar-footer { padding: 1.5rem; border-top: 1px solid rgba(255,255,255,0.08); background: rgba(0,0,0,0.2); }
+        .sidebar-footer { padding: 1.5rem; border-top: 1px solid rgba(255,255,255,0.08); background: rgba(0,0,0,0.3); }
         .logout-btn {
           width: 100%;
           display: flex;
           align-items: center;
-          justify-content: center;
-          gap: 0.8rem;
-          background: rgba(211, 47, 47, 0.1);
-          border: 1px solid rgba(211, 47, 47, 0.2);
-          color: #ef5350;
+          justify-content: flex-start;
+          gap: 1rem;
+          background: transparent;
+          border: none;
+          color: #FFFFFF;
           cursor: pointer;
-          padding: 0.75rem;
+          padding: 1rem 1.25rem;
           border-radius: 8px;
           transition: all 0.2s;
           font-weight: 500;
         }
-        .logout-btn:hover { background: #d32f2f; color: white; border-color: #d32f2f; }
-        .admin-sidebar.closed .logout-btn { padding: 0.75rem; }
+        .logout-btn:hover { background: rgba(233, 30, 99, 0.1); color: #FFFFFF; }
+        .admin-sidebar.closed .logout-btn { padding: 1rem; justify-content: center; }
 
         /* Main Content */
         .admin-main {
@@ -408,7 +298,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
         .avatar {
           width: 42px;
           height: 42px;
-          background: linear-gradient(135deg, #d32f2f 0%, #b71c1c 100%);
+          background: linear-gradient(135deg, #E91E63 0%, #C2185B 100%);
           color: white;
           border-radius: 50%;
           display: flex;
@@ -416,7 +306,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
           justify-content: center;
           font-weight: 600;
           font-size: 1.1rem;
-          box-shadow: 0 4px 10px rgba(211, 47, 47, 0.3);
+          box-shadow: 0 4px 10px rgba(233, 30, 99, 0.3);
         }
 
         .content-area { padding: 2.5rem; flex: 1; overflow-y: auto; max-width: 1600px; margin: 0 auto; width: 100%; }
