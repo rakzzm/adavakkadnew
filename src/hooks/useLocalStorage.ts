@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 
 export function useLocalStorage<T>(key: string, initialValue: T) {
   const [storedValue, setStoredValue] = useState<T>(initialValue);
@@ -23,18 +23,26 @@ export function useLocalStorage<T>(key: string, initialValue: T) {
     return () => { isMounted.current = false; };
   }, [key]);
 
-  // Sync to localStorage whenever storedValue changes
-  useEffect(() => {
-    if (isInitialized) {
-      try {
-        window.localStorage.setItem(key, JSON.stringify(storedValue));
-      } catch (error) {
-        console.warn(`Error setting localStorage key "${key}":`, error);
+  // Enhanced setValue that dispatches custom event for same-tab sync
+  const setValue = useCallback((value: T | ((val: T) => T)) => {
+    try {
+      const valueToStore = value instanceof Function ? value(storedValue) : value;
+      setStoredValue(valueToStore);
+      
+      if (typeof window !== 'undefined') {
+        window.localStorage.setItem(key, JSON.stringify(valueToStore));
+        
+        // Dispatch custom event for same-tab synchronization
+        window.dispatchEvent(new CustomEvent('local-storage-change', {
+          detail: { key, value: valueToStore }
+        }));
       }
+    } catch (error) {
+      console.warn(`Error setting localStorage key "${key}":`, error);
     }
-  }, [key, storedValue, isInitialized]);
+  }, [key, storedValue]);
 
-  // Listen for changes from other tabs
+  // Listen for changes from other tabs (storage event)
   useEffect(() => {
     const handleStorageChange = (e: StorageEvent) => {
       if (e.key === key && e.newValue) {
@@ -50,5 +58,18 @@ export function useLocalStorage<T>(key: string, initialValue: T) {
     return () => window.removeEventListener('storage', handleStorageChange);
   }, [key]);
 
-  return [storedValue, setStoredValue, isInitialized] as const;
+  // Listen for same-tab changes (custom event)
+  useEffect(() => {
+    const handleLocalStorageChange = (e: Event) => {
+      const customEvent = e as CustomEvent<{ key: string; value: T }>;
+      if (customEvent.detail.key === key) {
+        setStoredValue(customEvent.detail.value);
+      }
+    };
+
+    window.addEventListener('local-storage-change', handleLocalStorageChange);
+    return () => window.removeEventListener('local-storage-change', handleLocalStorageChange);
+  }, [key]);
+
+  return [storedValue, setValue, isInitialized] as const;
 }
