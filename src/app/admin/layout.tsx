@@ -126,8 +126,10 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
           border-right: 1px solid #333;
         }
 
-        .admin-sidebar::-webkit-scrollbar { width: 5px; }
-        .admin-sidebar::-webkit-scrollbar-thumb { background: #333; border-radius: 3px; }
+        .admin-sidebar::-webkit-scrollbar { width: 8px; }
+        .admin-sidebar::-webkit-scrollbar-track { background: #1e2a38; }
+        .admin-sidebar::-webkit-scrollbar-thumb { background: #E91E63; border-radius: 4px; }
+        .admin-sidebar::-webkit-scrollbar-thumb:hover { background: #C2185B; }
 
         .admin-sidebar.closed { width: 80px; }
         .admin-sidebar.closed .nav-text, 
@@ -138,13 +140,13 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
         .admin-sidebar.closed .sidebar-footer .nav-text { display: none; }
         
         .sidebar-header {
-          padding: 0;
-          height: 120px;
+          padding: 1rem;
+          height: 100px;
           display: flex;
           align-items: center;
           justify-content: center;
-          background-color: white;
-          border-bottom: 1px solid #eee;
+          background-color: #1e2a38;
+          border-bottom: 2px solid #E91E63;
         }
 
         .brand-logo { 
@@ -165,7 +167,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
           padding: 1rem;
         }
 
-        .admin-sidebar.closed .sidebar-header { padding: 0.5rem; height: 80px; }
+        .admin-sidebar.closed .sidebar-header { padding: 0.5rem; height: 70px; }
         /* .logo-icon { color: #d32f2f; font-size: 2rem; min-width: 32px; } */
         /* .brand-text h2 { margin: 0; font-family: var(--font-playfair); font-size: 1.4rem; letter-spacing: 0.5px; white-space: nowrap; } */
         /* .brand-text p { margin: 0; font-size: 0.75rem; color: #888; text-transform: uppercase; letter-spacing: 1px; white-space: nowrap; } */
