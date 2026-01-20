@@ -26,21 +26,24 @@ export function useLocalStorage<T>(key: string, initialValue: T) {
   // Enhanced setValue that dispatches custom event for same-tab sync
   const setValue = useCallback((value: T | ((val: T) => T)) => {
     try {
-      const valueToStore = value instanceof Function ? value(storedValue) : value;
-      setStoredValue(valueToStore);
-      
-      if (typeof window !== 'undefined') {
-        window.localStorage.setItem(key, JSON.stringify(valueToStore));
+      setStoredValue(currentValue => {
+        const valueToStore = value instanceof Function ? value(currentValue) : value;
         
-        // Dispatch custom event for same-tab synchronization
-        window.dispatchEvent(new CustomEvent('local-storage-change', {
-          detail: { key, value: valueToStore }
-        }));
-      }
+        if (typeof window !== 'undefined') {
+          window.localStorage.setItem(key, JSON.stringify(valueToStore));
+          
+          // Dispatch custom event for same-tab synchronization
+          window.dispatchEvent(new CustomEvent('local-storage-change', {
+            detail: { key, value: valueToStore }
+          }));
+        }
+        
+        return valueToStore;
+      });
     } catch (error) {
       console.warn(`Error setting localStorage key "${key}":`, error);
     }
-  }, [key, storedValue]);
+  }, [key]); // Only depend on key, not storedValue
 
   // Listen for changes from other tabs (storage event)
   useEffect(() => {
