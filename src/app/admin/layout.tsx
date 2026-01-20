@@ -123,9 +123,9 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
           border-right: 1px solid #e0e0e0;
         }
 
-        .admin-sidebar::-webkit-scrollbar { width: 8px; }
-        .admin-sidebar::-webkit-scrollbar-track { background: #f5f5f5; }
-        .admin-sidebar::-webkit-scrollbar-thumb { background: #E91E63; border-radius: 4px; }
+        .admin-sidebar::-webkit-scrollbar { width: 10px; }
+        .admin-sidebar::-webkit-scrollbar-track { background: #f0f0f0; }
+        .admin-sidebar::-webkit-scrollbar-thumb { background: #E91E63; border-radius: 5px; }
         .admin-sidebar::-webkit-scrollbar-thumb:hover { background: #C2185B; }
 
         .admin-sidebar.closed { width: 80px; }
@@ -192,7 +192,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
           text-decoration: none;
           transition: all 0.3s ease;
           border-radius: 8px;
-          font-size: 1.1rem;
+          font-size: 1.2rem;
           font-weight: 500;
           user-select: none;
           position: relative;
@@ -222,13 +222,13 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
         }
 
         .nav-item .icon { 
-          font-size: 1.6rem; 
-          min-width: 28px; 
+          font-size: 1.8rem; 
+          min-width: 32px; 
           transition: color 0.2s; 
           color: #1a1a1a !important; 
         }
         .nav-item.active .icon { color: #FFFFFF !important; }
-        .nav-item .nav-text { color: #1a1a1a !important; font-size: 1.1rem; }
+        .nav-item .nav-text { color: #1a1a1a !important; font-size: 1.2rem; }
         .nav-item.active .nav-text { color: #FFFFFF !important; }
         .nav-item span { color: #1a1a1a !important; }
         .nav-item.active span { color: #FFFFFF !important; }
