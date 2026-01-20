@@ -169,29 +169,76 @@ export default function CheckoutPage() {
                 <div className="payment-section">
                    <h3>Payment Method</h3>
                    <div className="payment-options">
+                     {/* Credit/Debit Card */}
                      <label className={`payment-option ${paymentMethod === 'card' ? 'selected' : ''}`}>
-                       <input type="radio" name="payment" value="card" checked={paymentMethod === 'card'} onChange={() => setPaymentMethod('card')} />
-                       <span>Debit / Credit Card</span>
+                       <div className="option-header">
+                         <input type="radio" name="payment" value="card" checked={paymentMethod === 'card'} onChange={() => setPaymentMethod('card')} />
+                         <span>Debit / Credit Card</span>
+                       </div>
+                       {paymentMethod === 'card' && (
+                         <div className="payment-details fade-in">
+                           <input type="text" placeholder="Card Number" className="payment-input" required />
+                           <div className="form-row" style={{ marginBottom: 0 }}>
+                             <input type="text" placeholder="MM / YY" className="payment-input" required />
+                             <input type="text" placeholder="CVV" className="payment-input" required />
+                           </div>
+                           <input type="text" placeholder="Name on Card" className="payment-input" style={{ marginTop: '0.75rem' }} required />
+                         </div>
+                       )}
                      </label>
                      
+                     {/* Razorpay */}
                      <label className={`payment-option ${paymentMethod === 'razorpay' ? 'selected' : ''}`}>
-                       <input type="radio" name="payment" value="razorpay" checked={paymentMethod === 'razorpay'} onChange={() => setPaymentMethod('razorpay')} />
-                       <span>Razorpay</span>
+                        <div className="option-header">
+                          <input type="radio" name="payment" value="razorpay" checked={paymentMethod === 'razorpay'} onChange={() => setPaymentMethod('razorpay')} />
+                          <span>Razorpay</span>
+                        </div>
+                        {paymentMethod === 'razorpay' && (
+                          <div className="payment-details fade-in">
+                            <p className="payment-note">You will be redirected to Razorpay secure payment gateway.</p>
+                          </div>
+                        )}
                      </label>
 
+                     {/* PhonePe */}
                      <label className={`payment-option ${paymentMethod === 'phonepe' ? 'selected' : ''}`}>
-                       <input type="radio" name="payment" value="phonepe" checked={paymentMethod === 'phonepe'} onChange={() => setPaymentMethod('phonepe')} />
-                       <span>PhonePe</span>
+                       <div className="option-header">
+                         <input type="radio" name="payment" value="phonepe" checked={paymentMethod === 'phonepe'} onChange={() => setPaymentMethod('phonepe')} />
+                         <span>PhonePe</span>
+                       </div>
+                       {paymentMethod === 'phonepe' && (
+                         <div className="payment-details fade-in">
+                            <input type="tel" placeholder="Enter PhonePe Number" className="payment-input" required pattern="[0-9]{10}" />
+                            <p className="payment-note">We will send a payment request to this number.</p>
+                         </div>
+                       )}
                      </label>
 
+                     {/* Paytm */}
                      <label className={`payment-option ${paymentMethod === 'paytm' ? 'selected' : ''}`}>
-                       <input type="radio" name="payment" value="paytm" checked={paymentMethod === 'paytm'} onChange={() => setPaymentMethod('paytm')} />
-                       <span>Paytm</span>
+                       <div className="option-header">
+                         <input type="radio" name="payment" value="paytm" checked={paymentMethod === 'paytm'} onChange={() => setPaymentMethod('paytm')} />
+                         <span>Paytm</span>
+                       </div>
+                       {paymentMethod === 'paytm' && (
+                         <div className="payment-details fade-in">
+                            <input type="tel" placeholder="Enter Paytm Number" className="payment-input" required pattern="[0-9]{10}" />
+                         </div>
+                       )}
                      </label>
 
+                     {/* UPI */}
                      <label className={`payment-option ${paymentMethod === 'upi' ? 'selected' : ''}`}>
-                       <input type="radio" name="payment" value="upi" checked={paymentMethod === 'upi'} onChange={() => setPaymentMethod('upi')} />
-                       <span>UPI / QR Code</span>
+                       <div className="option-header">
+                         <input type="radio" name="payment" value="upi" checked={paymentMethod === 'upi'} onChange={() => setPaymentMethod('upi')} />
+                         <span>UPI / QR Code</span>
+                       </div>
+                       {paymentMethod === 'upi' && (
+                         <div className="payment-details fade-in">
+                            <input type="text" placeholder="Enter UPI ID (e.g. name@okhdfcbank)" className="payment-input" required />
+                            <button type="button" className="btn-verify" onClick={() => alert('UPI ID Verified!')}>Verify</button>
+                         </div>
+                       )}
                      </label>
                    </div>
                 </div>
